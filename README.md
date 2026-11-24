@@ -22,3 +22,6 @@ Edit `data/availability.json` on GitHub: working days (0 = Sunday), opening/clos
 
 ## Before real bookings
 Bookings are only remembered in each visitor's own browser in this version. Real double-booking protection, payment verification and confirmation emails need a small server (see notes in `js/main.js`).
+
+## Admin page
+Open `admin.html` (default access code is in `js/admin.js`; change it). Edit looks, prices, photos, categories, dates and hours, then click **Download settings.json** and upload it to the `data` folder on GitHub. The code lock is only a courtesy: real privacy and shared bookings need the booking server.

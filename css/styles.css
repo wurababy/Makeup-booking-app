@@ -152,3 +152,16 @@ textarea:focus{border-color:var(--rose);outline:none;box-shadow:0 0 0 3px var(--
 .day:disabled{color:var(--grey);opacity:.45;cursor:not-allowed}
 .sum div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--champagne)}
 .sum span{color:var(--grey-text)}.sum b{text-align:right;font-weight:600}
+
+/* Admin */
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.admbar{background:var(--baby);border-radius:var(--r);padding:16px 20px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.sumrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:18px 0}
+.tag{font-size:.78rem;background:var(--baby);color:var(--rose);border-radius:999px;padding:2px 10px;margin-left:6px;font-weight:600}
+.appt{margin-bottom:12px}.appt summary{cursor:pointer}.appt.off{opacity:.55}
+.lk{display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:16px}.thumb{aspect-ratio:3/4;padding:6px}
+.lkf{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px 14px;align-content:start}
+@media(max-width:640px){.lk{grid-template-columns:1fr}.thumb{max-width:140px}}
+.chip{display:inline-flex;gap:6px;align-items:center;background:var(--white);border:1px solid var(--champagne);border-radius:999px;padding:6px 8px 6px 14px;margin:0 8px 8px 0}
+.chip button{border:0;background:none;color:var(--rose);font-size:1.1rem;cursor:pointer}
+ul.dl{list-style:none;padding:0;margin:10px 0}ul.dl li{padding:6px 0;border-bottom:1px solid var(--champagne)}

@@ -1,28 +1,17 @@
 /* ====== SETTINGS: edit these ====== */
 var CONFIG={deposit:15000,currency:"₦",
   // Add your Paystack public key (starts with pk_) to take real payments. Leave blank for demo mode.
-  paystackKey:""};
+  paystackKey:"",
+  whatsapp:"234XXXXXXXXXX"}; // your WhatsApp number: digits only, with country code
 var $=function(i){return document.getElementById(i)};
 var fmt=function(n){return CONFIG.currency+n.toLocaleString("en-NG")};
 var chosen={style:"",time:""};
 
 /* Makeup looks: edit names, categories, prices, descriptions. Photos go in images/ as <slug>.jpg */
-var CATS=["All Looks","Soft Glam","Full Glam","Bridal","Birthday","Natural","Traditional","Editorial"];
-var LOOKS=[
- {n:"Soft Glam",c:"Soft Glam",s:"soft-glam",m:60,p:45000,d:"Polished, luminous makeup for parties and photoshoots."},
- {n:"Rosy Soft Glam",c:"Soft Glam",s:"rosy-soft-glam",m:60,p:48000,d:"Dewy skin, rosy cheeks and a glossy lip."},
- {n:"Full Glam",c:"Full Glam",s:"full-glam",m:90,p:55000,d:"Bold, sculpted and camera-ready for your biggest nights."},
- {n:"Smoky Full Glam",c:"Full Glam",s:"smoky-full-glam",m:90,p:60000,d:"Dramatic smoky eyes with flawless, long-wear skin."},
- {n:"Bridal Glam",c:"Bridal",s:"bridal-glam",m:150,p:120000,d:"A long-wear, romantic finish. Trial included."},
- {n:"Bridesmaid Glam",c:"Bridal",s:"bridesmaid-glam",m:75,p:50000,d:"Soft, coordinated glam for the bridal party."},
- {n:"Birthday Glam",c:"Birthday",s:"birthday-glam",m:75,p:50000,d:"Radiant and celebratory, made to be photographed."},
- {n:"Natural Glam",c:"Natural",s:"natural-glam",m:45,p:30000,d:"Fresh, skin-first makeup that looks effortlessly like you."},
- {n:"Traditional Glam",c:"Traditional",s:"traditional-glam",m:120,p:70000,d:"Rich, elegant makeup for weddings and cultural celebrations."},
- {n:"Editorial Look",c:"Editorial",s:"editorial-look",m:120,p:80000,d:"Creative, artistic makeup for shoots and fashion."}];
 var grid=$("looks-grid"),sel=$("style"),chips=$("chips"),cat="All Looks",cur="";
-function img(s){return "images/"+s+".jpg"}
-sel.innerHTML='<option value="">Choose a look</option>';
-LOOKS.forEach(function(l){sel.add(new Option(l.n,l.n))});
+function imgOf(l){return l.photo||"images/"+l.s+".jpg"}
+function fillSel(){var v=sel.value;sel.innerHTML='<option value="">Choose a look</option>';LOOKS.forEach(function(l){sel.add(new Option(l.n,l.n))});sel.value=v}
+fillSel();
 function drawChips(){
   chips.innerHTML="";
   CATS.forEach(function(x){
@@ -34,13 +23,13 @@ function drawGrid(){
   grid.innerHTML="";
   LOOKS.filter(function(l){return cat==="All Looks"||l.c===cat}).forEach(function(l){
     var a=document.createElement("article");a.className="card look";
-    a.innerHTML='<div class="photo" data-ph="Add photo"><img src="'+img(l.s)+'" alt="'+l.n+' makeup look" onerror="this.remove()"></div><h3>'+l.n+'</h3><p class="muted">'+l.d+'</p><div class="price">'+fmt(l.p)+'</div><button class="btn btn-primary" type="button" style="margin:10px 8px 0;align-self:flex-start;padding:10px 22px">Choose This Look</button>';
+    a.innerHTML='<div class="photo" data-ph="Add photo"><img src="'+imgOf(l)+'" alt="'+l.n+' makeup look" onerror="this.remove()"></div><h3>'+l.n+'</h3><p class="muted">'+l.d+'</p><div class="price">'+fmt(l.p)+'</div><button class="btn btn-primary" type="button" style="margin:10px 8px 0;align-self:flex-start;padding:10px 22px">Choose This Look</button>';
     a.querySelector("button").onclick=a.querySelector(".photo").onclick=function(){openLook(l)};
     grid.appendChild(a)});
 }
 function openLook(l){
   cur=l.n;$("dcat").textContent=l.c;$("dname").textContent=l.n;$("ddesc").textContent=l.d;$("dprice").textContent=fmt(l.p)+" · about "+dur(l.m);
-  var i=$("dimg");i.style.display="";i.onerror=function(){i.style.display="none"};i.src=img(l.s);
+  var i=$("dimg");i.style.display="";i.onerror=function(){i.style.display="none"};i.src=imgOf(l);
   $("gallery").hidden=true;$("detail").hidden=false;$("looks").scrollIntoView();
 }
 $("back").onclick=function(){$("detail").hidden=true;$("gallery").hidden=false;$("looks").scrollIntoView()};
@@ -73,14 +62,14 @@ function slotsFor(date){
   var l=curLook(),out=[];if(!l)return out;
   for(var s=tm(AV.open);s+l.m<=tm(AV.close);s+=AV.step){
     var e=s+l.m+AV.buffer,free=true;
-    B.forEach(function(b){if(b.date===date&&s<b.end&&e>b.start)free=false});
+    B.forEach(function(b){if(b.status!=="cancelled"&&b.date===date&&s<b.end&&e>b.start)free=false});
     if(free)out.push(s)}
   return out;
 }
 function dayOK(d){
   var t=new Date();t.setHours(0,0,0,0);
   var a=new Date(t),z=new Date(t);a.setDate(t.getDate()+AV.leadDays);z.setDate(t.getDate()+AV.maxDays);
-  return d>=a&&d<=z&&AV.workDays.indexOf(d.getDay())>-1&&AV.blocked.indexOf(ds(d))<0&&slotsFor(ds(d)).length>0;
+  return d>=a&&d<=z&&(AV.workDays.indexOf(d.getDay())>-1||(AV.extra||[]).indexOf(ds(d))>-1)&&AV.blocked.indexOf(ds(d))<0&&slotsFor(ds(d)).length>0;
 }
 var now=new Date(),cy=now.getFullYear(),cm=now.getMonth(),pickD="",pickT=null,info={};
 function calDraw(){
@@ -118,7 +107,14 @@ function onLook(){
   calDraw();slotDraw();ready1();
 }
 sel.onchange=onLook;
-fetch("data/availability.json").then(function(r){return r.ok?r.json():{}}).then(function(o){for(var k in o)AV[k]=o[k];onLook()}).catch(function(){});
+function applySettings(o){
+  if(!o)return;if(o.looks)LOOKS=o.looks;if(o.cats)CATS=["All Looks"].concat(o.cats);
+  if(o.av)for(var k in o.av)AV[k]=o.av[k];if(o.deposit)CONFIG.deposit=o.deposit;
+}
+function refresh(){fillSel();if(CATS.indexOf(cat)<0)cat="All Looks";drawChips();drawGrid();onLook()}
+function local(){try{applySettings(JSON.parse(localStorage.getItem("settings")))}catch(x){}}
+/* Settings: data/settings.json (published from the admin page); changes made on this device show immediately */
+fetch("data/settings.json").then(function(r){return r.ok?r.json():null}).then(function(o){applySettings(o);local();refresh()}).catch(function(){local();refresh()});
 function go(n,quiet){
   ["p1","p2","p3"].forEach(function(id,i){$(id).hidden=i!==n-1});
   document.querySelectorAll("#steps li").forEach(function(li,i){li.className=i===n-1?"on":""});
@@ -148,10 +144,11 @@ function fail(msg){$("payerr").textContent=msg}
 function finish(ref){
   /* Server version: confirm here only after your server verifies the Paystack payment. */
   if(slotsFor(pickD).indexOf(pickT)<0){fail("Sorry, that time was just taken. Your payment was not used for a booking. Please choose another time.");go(1);slotDraw();calDraw();return}
-  var l=curLook();B.push({date:pickD,start:pickT,end:pickT+l.m+AV.buffer,ref:ref});saveB();
+  var l=curLook(),dt=new Date(pickD+"T00:00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  B.push({ref:ref,date:pickD,start:pickT,end:pickT+l.m+AV.buffer,name:info.name,phone:info.phone,email:info.email,occ:info.occ,notes:info.notes,look:l.n,price:l.p,deposit:CONFIG.deposit,status:"confirmed",balancePaid:false});saveB();
   ["p1","p2","p3"].forEach(function(id){$(id).hidden=true});
-  $("who").textContent=info.name.split(" ")[0];
-  $("donesum").innerHTML=rows(0,summary().concat([["Deposit paid",fmt(CONFIG.deposit)],["Reference",ref]]));
+  $("donesum").innerHTML=rows(0,[["Client",info.name],["Makeup look",l.n],["Date",dt],["Time",lbl(pickT)],["Amount paid",fmt(CONFIG.deposit)],["Remaining balance",fmt(Math.max(l.p-CONFIG.deposit,0))],["Booking reference",ref]]);
+  $("wa").href="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent("Hi! I’ve just booked "+l.n+" for "+dt+" at "+lbl(pickT)+". Reference: "+ref+".");
   $("donenote").textContent=CONFIG.paystackKey?"A confirmation will be sent to "+info.email+".":"Demo mode: no payment was taken and no email was sent.";
   $("done").style.display="block";$("done").scrollIntoView();calDraw();slotDraw();
 }
@@ -242,10 +239,11 @@ function drawRecs(){
   order=order.slice(r).concat(order.slice(0,r));
   var picks=[];
   order.forEach(function(c){if(picks.length<4){var m=LOOKS.filter(function(l){return l.c===c});if(m.length)picks.push(m[seed%m.length])}});
+  LOOKS.forEach(function(l){if(picks.length<4&&picks.indexOf(l)<0)picks.push(l)});
   var g=$("recs");g.innerHTML="";
   picks.forEach(function(l){
     var a=document.createElement("article");a.className="card rec";
-    a.innerHTML='<div class="photo" data-ph="Add photo"><img src="'+img(l.s)+'" alt="'+l.n+' makeup look" onerror="this.remove()"></div><h3>'+l.n+'</h3><p class="muted">'+l.d+'</p><p class="why"><b>Why this look:</b> '+WHY[l.c].replace("{s}",res.shape.v.toLowerCase()).replace("{e}",res.eyes.v.toLowerCase())+'</p><div class="meta">'+fmt(l.p)+' · about '+dur(l.m)+'</div><button class="btn btn-primary btn-sm" type="button">Select This Look</button>';
+    a.innerHTML='<div class="photo" data-ph="Add photo"><img src="'+imgOf(l)+'" alt="'+l.n+' makeup look" onerror="this.remove()"></div><h3>'+l.n+'</h3><p class="muted">'+l.d+'</p><p class="why"><b>Why this look:</b> '+(WHY[l.c]||"A lovely match for your {s} face shape and {e} eyes.").replace("{s}",res.shape.v.toLowerCase()).replace("{e}",res.eyes.v.toLowerCase())+'</p><div class="meta">'+fmt(l.p)+' · about '+dur(l.m)+'</div><button class="btn btn-primary btn-sm" type="button">Select This Look</button>';
     a.querySelector("button").onclick=function(){pickStyle(l.n)};g.appendChild(a);
   });
 }

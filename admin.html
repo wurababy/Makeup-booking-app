@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Admin | Your Studio Name</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head><body>
+<header class="nav"><div class="wrap"><span class="logo">Admin</span><a class="btn btn-quiet btn-sm" href="index.html">View website</a></div></header>
+<main class="wrap" style="padding-top:32px;padding-bottom:64px">
+<div id="gate" class="card" style="max-width:420px;margin:40px auto">
+  <h2 style="font-size:2rem">Welcome back</h2>
+  <form id="gform"><div class="field"><label for="code">Access code</label><input id="code" type="password" autocomplete="off"></div>
+  <p id="gerr" style="color:var(--rose);margin:0 0 10px"></p><button class="btn btn-primary" type="submit">Enter</button></form>
+</div>
+<div id="app" hidden>
+  <div class="admbar"><span class="note" id="msg" role="status" style="margin:0">Changes to prices, looks and dates save on this device.</span>
+    <span class="row"><button id="dl" class="btn btn-primary btn-sm" type="button">Download settings.json</button><button id="cp" class="btn btn-quiet btn-sm" type="button">Copy settings</button></span></div>
+  <div class="tabs" id="tabs"><button class="slot" data-t="t1" aria-pressed="true">Appointments</button><button class="slot" data-t="t2" aria-pressed="false">Dates &amp; times</button><button class="slot" data-t="t3" aria-pressed="false">Looks &amp; prices</button></div>
+
+  <div id="t1"><div class="sumrow" id="sumrow"></div><div id="alist"></div><button id="seed" class="btn btn-text btn-sm" type="button" hidden>Load sample bookings</button></div>
+
+  <div id="t2" hidden>
+    <div class="card"><h3>Appointment times</h3><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:12px">
+      <div><label for="open">Opens</label><input id="open" type="time"></div><div><label for="close">Closes</label><input id="close" type="time"></div>
+      <div><label for="step">Start times every</label><select id="step"><option value="15">15 min</option><option value="30">30 min</option><option value="60">60 min</option></select></div>
+      <div><label for="buf">Buffer (minutes)</label><input id="buf" type="number" min="0" step="5"></div>
+      <div><label for="dep">Deposit (₦)</label><input id="dep" type="number" min="0" step="1000"></div></div>
+      <h3 style="margin-top:22px">Days you work</h3><div class="row" id="days" style="margin-top:8px"></div></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <div class="card"><h3>Block dates</h3><p class="note">Clients can’t book these days.</p><div class="row"><input id="in-blocked" type="date" style="width:auto"><button id="add-blocked" class="btn btn-quiet btn-sm" type="button">Block</button></div><ul class="dl" id="l-blocked"></ul></div>
+      <div class="card"><h3>Add available dates</h3><p class="note">Open a day you don’t normally work.</p><div class="row"><input id="in-extra" type="date" style="width:auto"><button id="add-extra" class="btn btn-quiet btn-sm" type="button">Add</button></div><ul class="dl" id="l-extra"></ul></div></div>
+  </div>
+
+  <div id="t3" hidden>
+    <div class="card"><h3>Categories</h3><div id="cats" style="margin:12px 0 4px"></div><div class="row"><input id="newcat" placeholder="New category" style="width:auto"><button id="addcat" class="btn btn-quiet btn-sm" type="button">Add category</button></div></div>
+    <div id="llist" style="margin-top:18px"></div><button id="addlook" class="btn btn-primary" type="button">Add a look</button>
+  </div>
+  <p class="note" style="margin-top:28px">To show changes to clients: download settings.json and upload it to the <b>data</b> folder of your GitHub repository (replace the old one). Bookings below are stored on this device until the booking server is connected.</p>
+</div></main>
+<script src="js/defaults.js"></script><script src="js/admin.js"></script>
+</body></html>
