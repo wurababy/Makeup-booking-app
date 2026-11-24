@@ -31,51 +31,40 @@
 </header>
 
 <main id="top">
+
   <section class="hero">
-    <div class="wrap">
-      <hr class="rule">
-      <h1>Soft, polished,<br><em>unmistakably you.</em></h1>
-      <p>Bridal, glam and natural makeup, tailored to your features and the occasion.</p>
-      <div class="row" style="justify-content:center">
-        <a class="btn btn-primary" href="#book">Book your look</a>
-        <a class="btn btn-quiet" href="#looks">View portfolio</a>
+    <div class="wrap two">
+      <div>
+        <hr class="rule" style="margin-left:0">
+        <h1>Your Beauty,<br>Your Signature.</h1>
+        <p class="lead">Discover your perfect makeup look with personalised beauty recommendations and professional makeup artistry.</p>
+        <div class="row">
+          <a class="btn btn-primary" href="#looks">Explore Makeup Looks</a>
+          <a class="btn btn-quiet" href="#assistant">Discover My Perfect Look</a>
+        </div>
       </div>
+      <div class="photo hero-photo" data-ph="Add your hero photo: images/hero.jpg"><img src="images/hero.jpg" alt="A woman wearing a soft glam makeup look" onerror="this.remove()"></div>
     </div>
   </section>
 
   <section id="looks" class="band">
     <div class="wrap">
       <h2>Makeup Looks</h2>
-      <p class="muted">A few of my favourite looks.</p>
-      <!-- To add photos: put them in the images folder and add style="background-image:url(images/your-photo.jpg)" to a tile -->
-      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-        <div class="tile" role="img" aria-label="Bridal makeup">Bridal<small>Add photo</small></div>
-        <div class="tile" role="img" aria-label="Soft glam makeup">Soft glam<small>Add photo</small></div>
-        <div class="tile" role="img" aria-label="Natural makeup">Natural<small>Add photo</small></div>
-        <div class="tile" role="img" aria-label="Photoshoot makeup">Photoshoot<small>Add photo</small></div>
-      </div>
+      <p class="muted">Find the look for your moment, then book it in a few taps.</p>
+      <div id="looks-grid" class="grid looks"></div>
     </div>
   </section>
 
-  <section id="styles">
-    <div class="wrap">
-      <h2>Styles and prices</h2>
-      <p class="muted">Tap a style to start your booking.</p>
-      <div class="grid">
-        <button class="card style" data-name="Natural Beauty" aria-pressed="false"><h3>Natural Beauty</h3><p class="muted">Fresh, skin-first makeup that looks effortlessly like you.</p><div class="price">₦30,000</div></button>
-        <button class="card style" data-name="Soft Glam" aria-pressed="false"><h3>Soft Glam</h3><p class="muted">Polished and luminous, for parties and photoshoots.</p><div class="price">₦45,000</div></button>
-        <button class="card style" data-name="Bridal Glow" aria-pressed="false"><h3>Bridal Glow</h3><p class="muted">A long-wear, romantic finish. Trial included.</p><div class="price">₦120,000</div></button>
+  <section id="assistant" class="blush">
+    <div class="wrap two">
+      <div>
+        <h2>Not Sure Which Look Suits You?</h2>
+        <p class="lead">Let our AI Beauty Assistant analyse your facial features and help you discover makeup looks you’ll love.</p>
+        <button id="start" class="btn btn-light" type="button">Start My Beauty Consultation</button>
       </div>
-    </div>
-  </section>
-
-  <section id="assistant" class="band">
-    <div class="wrap">
-      <h2>AI Beauty Assistant</h2>
-      <p class="muted">Upload a clear, front-facing photo in natural light and get makeup ideas suited to you.</p>
-      <div class="card" style="margin-top:2rem">
+      <div class="card">
         <img id="pv" class="preview" alt="Your uploaded photo">
-        <div class="field"><label for="photo">Your photo</label><input id="photo" type="file" accept="image/*"></div>
+        <div class="field"><label for="photo">Upload a clear, front-facing photo</label><input id="photo" type="file" accept="image/*"></div>
         <div class="field"><label class="check"><input id="consent" type="checkbox"><span>I agree to my photo being analysed for makeup recommendations. It is not shared or kept.</span></label></div>
         <button id="analyse" class="btn btn-primary" disabled>Get my recommendations</button>
         <div id="result" class="result" aria-live="polite">
@@ -87,16 +76,39 @@
     </div>
   </section>
 
+  <section id="about">
+    <div class="wrap two">
+      <div class="photo" data-ph="Add your photo: images/about.jpg"><img src="images/about.jpg" alt="Portrait of the makeup artist" onerror="this.remove()"></div>
+      <div>
+        <h2>Hello, I’m [Your Name]</h2>
+        <p>I’m a professional makeup artist based in Lagos. I believe great makeup should feel like you, only more radiant, so every look is tailored to your features, your skin and your occasion.</p>
+        <p class="muted">Replace this with your story, training and the clients you love working with.</p>
+        <a class="btn btn-quiet" href="#book">Book Appointment</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" class="band">
+    <div class="wrap">
+      <h2>Kind words from clients</h2>
+      <div class="grid">
+        <figure class="card quote"><blockquote>She made me feel so beautiful on my wedding day. The makeup lasted from morning until the last dance.</blockquote><figcaption>Adaeze, Bridal Glam</figcaption></figure>
+        <figure class="card quote"><blockquote>Soft, flawless and exactly my style. I’ve never received so many compliments on my birthday.</blockquote><figcaption>Tola, Birthday Glam</figcaption></figure>
+        <figure class="card quote"><blockquote>The consultation helped me finally pick a look that suits my skin tone. I felt like myself, only better.</blockquote><figcaption>Zainab, Natural Glam</figcaption></figure>
+      </div>
+      <p class="note" style="margin-top:14px">Sample reviews. Replace with your real client feedback.</p>
+    </div>
+  </section>
+
   <section id="book">
     <div class="wrap">
       <h2>Book your appointment</h2>
-      <p class="muted">Choose a style, pick a date and time, and secure it with a deposit.</p>
+      <p class="muted">Choose a look, pick a date and time, and secure it with a deposit.</p>
       <div class="card" style="margin-top:2rem">
         <form id="bookform">
           <div class="two">
             <div>
-              <div class="field"><label for="style">Style</label>
-                <select id="style" required><option value="">Choose a style</option><option>Natural Beauty</option><option>Soft Glam</option><option>Bridal Glow</option></select></div>
+              <div class="field"><label for="style">Makeup look</label><select id="style" required></select></div>
               <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
               <div class="field"><label id="tl">Time</label><div id="slots" class="slots" role="group" aria-labelledby="tl"></div></div>
             </div>
@@ -118,28 +130,36 @@
       </div>
     </div>
   </section>
-  <section id="about" class="band">
-    <div class="wrap">
-      <h2>About</h2>
-      <p>Hello, I'm [Your Name], a professional makeup artist based in Lagos. I believe great makeup should feel like you, only more radiant. Every look is tailored to your features, your skin and your occasion.</p>
-      <p class="muted">Replace this with your story, training and the kind of clients you love working with.</p>
-    </div>
-  </section>
-
-  <section id="contact">
-    <div class="wrap">
-      <h2>Contact</h2>
-      <p class="muted">Questions before you book? I'd love to hear from you.</p>
-      <div class="row" style="margin-top:1.4rem">
-        <a class="btn btn-quiet" href="https://wa.me/234XXXXXXXXXX">WhatsApp</a>
-        <a class="btn btn-quiet" href="https://instagram.com/yourhandle">Instagram</a>
-        <a class="btn btn-quiet" href="mailto:hello@yourstudio.com">Email</a>
-      </div>
-    </div>
-  </section>
 </main>
 
-<footer><div class="wrap">© Your Studio Name · Lagos, Nigeria</div></footer>
+<dialog id="lookdlg" aria-labelledby="lname">
+  <div class="photo" data-ph="Add photo"><img id="limg" alt=""></div>
+  <h3 id="lname" style="margin-top:16px"></h3>
+  <p id="ldesc" class="muted" style="margin:.4rem 0"></p>
+  <div class="price" id="lprice"></div>
+  <div class="row" style="margin-top:14px">
+    <button id="lbook" class="btn btn-primary" type="button">Book this look</button>
+    <button id="lclose" class="btn btn-quiet" type="button">Close</button>
+  </div>
+</dialog>
+
+<footer id="contact">
+  <div class="wrap foot">
+    <div>
+      <a class="logo" href="#top">Your Studio Name</a>
+      <p class="muted" style="margin-top:8px">Makeup artistry in Lagos, Nigeria.</p>
+    </div>
+    <div>
+      <h3>Get in touch</h3>
+      <p><a href="https://wa.me/234XXXXXXXXXX">WhatsApp</a><br><a href="https://instagram.com/yourhandle">Instagram</a><br><a href="mailto:hello@yourstudio.com">hello@yourstudio.com</a></p>
+    </div>
+    <div>
+      <h3>Policies</h3>
+      <p class="note">A deposit secures your date and is deducted from your total.<br>Please reschedule at least 48 hours ahead.<br>Your photos are never shared or kept.</p>
+    </div>
+  </div>
+  <div class="wrap copy">© Your Studio Name</div>
+</footer>
 
 <!-- Paystack (only needed once you add your public key in js/main.js) -->
 <script src="https://js.paystack.co/v1/inline.js" defer></script>

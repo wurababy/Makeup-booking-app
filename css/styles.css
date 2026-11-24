@@ -66,3 +66,29 @@ footer{padding:40px 0;text-align:center;color:var(--grey-text);font-size:.92rem}
   .nav a.l{padding:0;font-size:.95rem}
   .nav nav .btn{width:auto;padding:11px 24px}
 }
+
+/* Homepage */
+.lead{font-size:1.1rem;color:var(--grey-text)}
+.hero{padding:40px 0 64px;text-align:left}.hero .two{align-items:center}
+.hero h1{margin-bottom:1.2rem}.hero .lead{margin:0 0 1.8rem}
+.photo{position:relative;background:var(--baby);border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;display:grid;place-items:center;text-align:center;padding:16px;color:var(--grey-text);font-size:.85rem}
+.photo::before{content:attr(data-ph)}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-photo{max-height:620px;width:100%}
+.look{padding:12px 12px 20px;display:flex;flex-direction:column;gap:6px}
+.look .photo{margin-bottom:10px}.look h3{padding:0 8px}.look .note{padding:0 8px;margin:0}
+.look .btn{margin:8px 8px 0;align-self:flex-start;padding:10px 22px}
+.looks{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.blush{background:var(--blush)}.blush h2,.blush .lead{color:var(--brown)}
+.blush .two{align-items:center}
+.btn-light{background:var(--white);color:var(--brown)}.btn-light:hover{background:var(--baby)}
+.quote{margin:0}.quote blockquote{margin:0 0 14px;font:500 1.3rem/1.4 var(--serif);color:var(--brown)}
+.quote figcaption{font-size:.9rem;color:var(--rose);font-weight:600}
+dialog{border:1px solid var(--champagne);border-radius:var(--r);padding:20px;max-width:420px;width:calc(100% - 32px);background:var(--white);color:var(--brown)}
+dialog::backdrop{background:rgba(73,56,58,.4)}
+dialog .photo{aspect-ratio:4/3}
+footer{background:var(--baby);padding:56px 0 28px;text-align:left}
+.foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+footer h3{font-size:1.25rem;margin-bottom:8px}footer a:not(.logo){color:var(--rose)}
+footer p{max-width:none}.copy{margin-top:32px;font-size:.85rem;color:var(--grey-text)}
+@media(min-width:880px){.hero{padding:64px 0 88px}}
