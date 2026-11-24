@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Your Studio Name | Makeup Artistry</title>
+<meta name="description" content="Bridal, soft glam and natural makeup artistry. Book your appointment online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">Your Studio Name</a>
+    <nav id="menu" aria-label="Main">
+      <ul>
+        <li><a class="l" href="#top">Home</a></li>
+        <li><a class="l" href="#looks">Makeup Looks</a></li>
+        <li><a class="l" href="#assistant">AI Beauty Assistant</a></li>
+        <li><a class="l" href="#about">About</a></li>
+        <li><a class="l" href="#contact">Contact</a></li>
+      </ul>
+      <a class="btn btn-primary" href="#book">Book Appointment</a>
+    </nav>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap two">
+      <div>
+        <hr class="rule" style="margin-left:0">
+        <h1>Your Beauty,<br>Your Signature.</h1>
+        <p class="lead">Discover your perfect makeup look with personalised beauty recommendations and professional makeup artistry.</p>
+        <div class="row">
+          <a class="btn btn-primary" href="#looks">Explore Makeup Looks</a>
+          <a class="btn btn-quiet" href="#assistant">Discover My Perfect Look</a>
+        </div>
+      </div>
+      <div class="photo hero-photo" data-ph="Add your hero photo: images/hero.jpg"><img src="images/hero.jpg" alt="A woman wearing a soft glam makeup look" onerror="this.remove()"></div>
+    </div>
+  </section>
+
+  <section id="looks" class="band">
+    <div class="wrap">
+      <h2>Makeup Looks</h2>
+      <p class="muted">Find the look for your moment, then book it in a few taps.</p>
+      <div id="looks-grid" class="grid looks"></div>
+    </div>
+  </section>
+
+  <section id="assistant" class="blush">
+    <div class="wrap two">
+      <div>
+        <h2>Not Sure Which Look Suits You?</h2>
+        <p class="lead">Let our AI Beauty Assistant analyse your facial features and help you discover makeup looks you’ll love.</p>
+        <button id="start" class="btn btn-light" type="button">Start My Beauty Consultation</button>
+      </div>
+      <div class="card">
+        <img id="pv" class="preview" alt="Your uploaded photo">
+        <div class="field"><label for="photo">Upload a clear, front-facing photo</label><input id="photo" type="file" accept="image/*"></div>
+        <div class="field"><label class="check"><input id="consent" type="checkbox"><span>I agree to my photo being analysed for makeup recommendations. It is not shared or kept.</span></label></div>
+        <button id="analyse" class="btn btn-primary" disabled>Get my recommendations</button>
+        <div id="result" class="result" aria-live="polite">
+          <h3 id="rname"></h3><p id="rtext" style="margin-top:.4rem"></p>
+          <button id="rbook" class="btn btn-quiet" type="button">Book this look</button>
+          <p class="note" style="margin:12px 0 0">Preview version: results are sample suggestions until the AI service is connected.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap two">
+      <div class="photo" data-ph="Add your photo: images/about.jpg"><img src="images/about.jpg" alt="Portrait of the makeup artist" onerror="this.remove()"></div>
+      <div>
+        <h2>Hello, I’m [Your Name]</h2>
+        <p>I’m a professional makeup artist based in Lagos. I believe great makeup should feel like you, only more radiant, so every look is tailored to your features, your skin and your occasion.</p>
+        <p class="muted">Replace this with your story, training and the clients you love working with.</p>
+        <a class="btn btn-quiet" href="#book">Book Appointment</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" class="band">
+    <div class="wrap">
+      <h2>Kind words from clients</h2>
+      <div class="grid">
+        <figure class="card quote"><blockquote>She made me feel so beautiful on my wedding day. The makeup lasted from morning until the last dance.</blockquote><figcaption>Adaeze, Bridal Glam</figcaption></figure>
+        <figure class="card quote"><blockquote>Soft, flawless and exactly my style. I’ve never received so many compliments on my birthday.</blockquote><figcaption>Tola, Birthday Glam</figcaption></figure>
+        <figure class="card quote"><blockquote>The consultation helped me finally pick a look that suits my skin tone. I felt like myself, only better.</blockquote><figcaption>Zainab, Natural Glam</figcaption></figure>
+      </div>
+      <p class="note" style="margin-top:14px">Sample reviews. Replace with your real client feedback.</p>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="wrap">
+      <h2>Book your appointment</h2>
+      <p class="muted">Choose a look, pick a date and time, and secure it with a deposit.</p>
+      <div class="card" style="margin-top:2rem">
+        <form id="bookform">
+          <div class="two">
+            <div>
+              <div class="field"><label for="style">Makeup look</label><select id="style" required></select></div>
+              <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
+              <div class="field"><label id="tl">Time</label><div id="slots" class="slots" role="group" aria-labelledby="tl"></div></div>
+            </div>
+            <div>
+              <div class="field"><label for="name">Your name</label><input id="name" required autocomplete="name"></div>
+              <div class="field"><label for="email">Email</label><input id="email" type="email" required autocomplete="email"></div>
+              <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" required autocomplete="tel"></div>
+            </div>
+          </div>
+          <p id="err" role="alert" style="color:var(--rose);font-weight:600;margin:0 0 12px"></p>
+          <button class="btn btn-primary" type="submit">Pay <span id="dep"></span> deposit</button>
+        </form>
+        <div id="done" class="done" aria-live="polite">
+          <div class="tick">✓</div>
+          <h3>You're booked, <span id="who"></span>!</h3>
+          <p id="summary" style="margin:.6rem auto"></p>
+          <p class="muted" style="margin:0 auto">A confirmation will be sent to your email.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="lookdlg" aria-labelledby="lname">
+  <div class="photo" data-ph="Add photo"><img id="limg" alt=""></div>
+  <h3 id="lname" style="margin-top:16px"></h3>
+  <p id="ldesc" class="muted" style="margin:.4rem 0"></p>
+  <div class="price" id="lprice"></div>
+  <div class="row" style="margin-top:14px">
+    <button id="lbook" class="btn btn-primary" type="button">Book this look</button>
+    <button id="lclose" class="btn btn-quiet" type="button">Close</button>
+  </div>
+</dialog>
+
+<footer id="contact">
+  <div class="wrap foot">
+    <div>
+      <a class="logo" href="#top">Your Studio Name</a>
+      <p class="muted" style="margin-top:8px">Makeup artistry in Lagos, Nigeria.</p>
+    </div>
+    <div>
+      <h3>Get in touch</h3>
+      <p><a href="https://wa.me/234XXXXXXXXXX">WhatsApp</a><br><a href="https://instagram.com/yourhandle">Instagram</a><br><a href="mailto:hello@yourstudio.com">hello@yourstudio.com</a></p>
+    </div>
+    <div>
+      <h3>Policies</h3>
+      <p class="note">A deposit secures your date and is deducted from your total.<br>Please reschedule at least 48 hours ahead.<br>Your photos are never shared or kept.</p>
+    </div>
+  </div>
+  <div class="wrap copy">© Your Studio Name</div>
+</footer>
+
+<!-- Paystack (only needed once you add your public key in js/main.js) -->
+<script src="https://js.paystack.co/v1/inline.js" defer></script>
+<script src="js/main.js"></script>
+</body>
+</html>
