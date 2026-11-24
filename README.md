@@ -13,3 +13,9 @@ Push this folder to a GitHub repository and import it at vercel.com (free). GitH
 
 ## Coming in later phases
 Supabase (database, photo storage), AI analysis, bookings, Paystack, admin login. Secret keys will go in Vercel environment variables, never in the code or in chat.
+
+## Phase 2: AI Beauty Assistant
+- Add `ANTHROPIC_API_KEY` to `.env.local` (copy `.env.example`). Without it the page shows "isn’t switched on yet".
+- Photos are shrunk in the browser (this also removes location data), sent to `/api/assess`, analysed once and discarded by default.
+- Optional "keep my photos": needs Supabase. Run `supabase/schema.sql` in the Supabase SQL Editor and add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
+- The secret keys are only used on the server (`lib/server`). Never put them in a `NEXT_PUBLIC_` variable.
