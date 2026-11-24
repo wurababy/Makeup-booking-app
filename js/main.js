@@ -67,3 +67,10 @@ go.addEventListener("click",function(){
   $("result").style.display="block";
   $("rbook").onclick=function(){pickStyle(r[0])};
 });
+
+/* Mobile menu: open/close with the button, a link tap, or Escape */
+var burger=document.querySelector(".burger"),menu=$("menu");
+function setMenu(open){menu.classList.toggle("open",open);burger.setAttribute("aria-expanded",open);burger.setAttribute("aria-label",open?"Close menu":"Open menu")}
+burger.addEventListener("click",function(){setMenu(!menu.classList.contains("open"))});
+menu.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){setMenu(false)})});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")setMenu(false)});

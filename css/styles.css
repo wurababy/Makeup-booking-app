@@ -12,7 +12,7 @@ p{margin:0 0 1rem;max-width:60ch}.muted{color:var(--grey-text)}
 .logo{font:600 1.6rem var(--serif);color:var(--rose);text-decoration:none}
 .nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0}
 .nav a.l{color:var(--brown);text-decoration:none;font-weight:500;font-size:.95rem}.nav a.l:hover{color:var(--rose)}
-@media(max-width:760px){.nav ul{display:none}}
+
 .btn{display:inline-flex;justify-content:center;align-items:center;font:600 1rem var(--sans);padding:14px 30px;border-radius:999px;border:1.5px solid transparent;text-decoration:none;cursor:pointer;transition:background .2s,color .2s}
 .btn-primary{background:var(--blush);color:var(--brown)}.btn-primary:hover{background:#E091A3}
 .btn-quiet{background:transparent;color:var(--rose);border-color:var(--rose)}.btn-quiet:hover{background:var(--baby)}
@@ -44,3 +44,25 @@ input:focus,select:focus{border-color:var(--rose);outline:none;box-shadow:0 0 0 
 .done{text-align:center;display:none}.done .tick{width:64px;height:64px;border-radius:50%;background:var(--blush);margin:0 auto 14px;display:grid;place-items:center;font-size:1.8rem}
 footer{padding:40px 0;text-align:center;color:var(--grey-text);font-size:.92rem}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* Navigation: mobile first */
+.nav nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--ivory);border-bottom:1px solid var(--champagne);padding:8px 24px 24px;flex-direction:column;gap:18px}
+.nav nav.open{display:flex}
+.nav ul{flex-direction:column;gap:0;width:100%}
+.nav ul li{border-bottom:1px solid var(--champagne)}
+.nav a.l{display:block;padding:15px 0;font-size:1.05rem}
+.nav nav .btn{width:100%}
+.burger{width:44px;height:44px;border:0;background:none;cursor:pointer;position:relative;border-radius:50%}
+.burger span,.burger::before,.burger::after{content:"";position:absolute;left:11px;right:11px;height:2px;background:var(--rose);border-radius:2px;transition:transform .2s,opacity .2s}
+.burger::before{top:15px}.burger span{top:21px}.burger::after{top:27px}
+.burger[aria-expanded=true]::before{transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded=true]::after{transform:translateY(-6px) rotate(-45deg)}
+.burger[aria-expanded=true] span{opacity:0}
+@media(min-width:880px){
+  .burger{display:none}
+  .nav nav{display:flex;position:static;flex-direction:row;align-items:center;gap:28px;padding:0;border:0;background:none}
+  .nav ul{flex-direction:row;gap:26px;width:auto}
+  .nav ul li{border:0}
+  .nav a.l{padding:0;font-size:.95rem}
+  .nav nav .btn{width:auto;padding:11px 24px}
+}

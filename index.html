@@ -16,12 +16,17 @@
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="#top">Your Studio Name</a>
-    <ul>
-      <li><a class="l" href="#portfolio">Portfolio</a></li>
-      <li><a class="l" href="#styles">Styles &amp; prices</a></li>
-      <li><a class="l" href="#assistant">Beauty assistant</a></li>
-    </ul>
-    <a class="btn btn-primary" href="#book" style="padding:10px 22px">Book now</a>
+    <nav id="menu" aria-label="Main">
+      <ul>
+        <li><a class="l" href="#top">Home</a></li>
+        <li><a class="l" href="#looks">Makeup Looks</a></li>
+        <li><a class="l" href="#assistant">AI Beauty Assistant</a></li>
+        <li><a class="l" href="#about">About</a></li>
+        <li><a class="l" href="#contact">Contact</a></li>
+      </ul>
+      <a class="btn btn-primary" href="#book">Book Appointment</a>
+    </nav>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu"><span></span></button>
   </div>
 </header>
 
@@ -33,14 +38,14 @@
       <p>Bridal, glam and natural makeup, tailored to your features and the occasion.</p>
       <div class="row" style="justify-content:center">
         <a class="btn btn-primary" href="#book">Book your look</a>
-        <a class="btn btn-quiet" href="#portfolio">View portfolio</a>
+        <a class="btn btn-quiet" href="#looks">View portfolio</a>
       </div>
     </div>
   </section>
 
-  <section id="portfolio" class="band">
+  <section id="looks" class="band">
     <div class="wrap">
-      <h2>Portfolio</h2>
+      <h2>Makeup Looks</h2>
       <p class="muted">A few of my favourite looks.</p>
       <!-- To add photos: put them in the images folder and add style="background-image:url(images/your-photo.jpg)" to a tile -->
       <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
@@ -66,7 +71,7 @@
 
   <section id="assistant" class="band">
     <div class="wrap">
-      <h2>Beauty assistant</h2>
+      <h2>AI Beauty Assistant</h2>
       <p class="muted">Upload a clear, front-facing photo in natural light and get makeup ideas suited to you.</p>
       <div class="card" style="margin-top:2rem">
         <img id="pv" class="preview" alt="Your uploaded photo">
@@ -110,6 +115,25 @@
           <p id="summary" style="margin:.6rem auto"></p>
           <p class="muted" style="margin:0 auto">A confirmation will be sent to your email.</p>
         </div>
+      </div>
+    </div>
+  </section>
+  <section id="about" class="band">
+    <div class="wrap">
+      <h2>About</h2>
+      <p>Hello, I'm [Your Name], a professional makeup artist based in Lagos. I believe great makeup should feel like you, only more radiant. Every look is tailored to your features, your skin and your occasion.</p>
+      <p class="muted">Replace this with your story, training and the kind of clients you love working with.</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <h2>Contact</h2>
+      <p class="muted">Questions before you book? I'd love to hear from you.</p>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn btn-quiet" href="https://wa.me/234XXXXXXXXXX">WhatsApp</a>
+        <a class="btn btn-quiet" href="https://instagram.com/yourhandle">Instagram</a>
+        <a class="btn btn-quiet" href="mailto:hello@yourstudio.com">Email</a>
       </div>
     </div>
   </section>
