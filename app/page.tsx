@@ -1,6 +1,9 @@
 import Link from "next/link";
 import Gallery from "@/components/Gallery";
 import Photo from "@/components/Photo";
+import { getCatalog } from "@/lib/server/looks";
+
+export const revalidate = 60;
 
 const REVIEWS = [
   { q: "She made me feel so beautiful on my wedding day. The makeup lasted from morning until the last dance.", by: "Adaeze, Bridal Glam" },
@@ -8,7 +11,8 @@ const REVIEWS = [
   { q: "The consultation helped me finally pick a look that suits my skin tone. I felt like myself, only better.", by: "Zainab, Natural Glam" },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const { looks, categories } = await getCatalog();
   return (
     <main>
       <section className="py-10 lg:py-16">
@@ -30,7 +34,7 @@ export default function Home() {
         <div className="wrap">
           <h2 className="text-4xl lg:text-5xl">Makeup Looks</h2>
           <p className="mt-2 text-muted">Browse by style, then choose the look you love.</p>
-          <Gallery />
+          <Gallery looks={looks} categories={categories} />
         </div>
       </section>
 

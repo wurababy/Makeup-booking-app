@@ -19,3 +19,12 @@ Supabase (database, photo storage), AI analysis, bookings, Paystack, admin login
 - Photos are shrunk in the browser (this also removes location data), sent to `/api/assess`, analysed once and discarded by default.
 - Optional "keep my photos": needs Supabase. Run `supabase/schema.sql` in the Supabase SQL Editor and add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
 - The secret keys are only used on the server (`lib/server`). Never put them in a `NEXT_PUBLIC_` variable.
+
+## Phases 4–6: booking, Paystack, admin
+1. In Supabase SQL Editor run `supabase/schema.sql`, then `supabase/phase4-6.sql`.
+2. In Supabase > Authentication: turn OFF "Allow new users to sign up", then add yourself under Users with a strong password.
+3. Fill in `.env.local` (see `.env.example`).
+4. In Paystack > Settings > API: set the **webhook URL** to `https://YOUR-SITE/api/paystack/webhook`.
+5. Sign in at `/admin`, click **Import starter looks**, set prices, photos, hours and blocked dates.
+
+How bookings stay safe: the database refuses overlapping appointments; a time is held for 15 minutes while paying; a booking is confirmed only after the server asks Paystack to verify the payment (also via webhook); unpaid or failed payments simply expire and never confirm.

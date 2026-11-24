@@ -1,5 +1,5 @@
 /* Phase 1 uses this list. In Phase 6 looks, prices and photos move into the database and are edited from the admin dashboard. */
-export type Look = { slug: string; name: string; category: string; description: string; price: number; minutes: number };
+export type Look = { slug: string; name: string; category: string; description: string; price: number; minutes: number; photo?: string };
 
 export const CATEGORIES = ["Soft Glam", "Full Glam", "Bridal", "Birthday", "Natural", "Traditional", "Editorial"] as const;
 
