@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { duration, naira } from "@/data/looks";
+import { shrink } from "@/lib/shrink";
 
 type L = { slug: string; name: string; price: number; minutes: number };
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -16,6 +17,7 @@ export default function BookingFlow({ looks, deposit, initial }: { looks: L[]; d
   const [step, setStep] = useState(1), [tick, setTick] = useState(0);
   const [f, setF] = useState({ name: "", phone: "", email: "", occasion: "", notes: "" });
   const [busy, setBusy] = useState(false), [err, setErr] = useState("");
+  const [insp, setInsp] = useState<File | null>(null);
   const look = looks.find((l) => l.slug === slug);
 
   useEffect(() => {
@@ -34,7 +36,10 @@ export default function BookingFlow({ looks, deposit, initial }: { looks: L[]; d
   async function pay() {
     setBusy(true); setErr("");
     try {
-      const res = await fetch("/api/bookings", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ slug, date, time, ...f }) });
+      const body = new FormData();
+      (Object.entries({ slug, date, time, ...f }) as [string, string][]).forEach(([k, v]) => body.append(k, v));
+      if (insp) body.append("inspiration", insp);
+      const res = await fetch("/api/bookings", { method: "POST", body });
       const j = await res.json();
       if (j.ok) { window.location.href = j.url; return; }
       setErr(j.error || "Something went wrong."); if (res.status === 409) { setStep(1); setTime(""); setTick((t) => t + 1); }
@@ -89,9 +94,12 @@ export default function BookingFlow({ looks, deposit, initial }: { looks: L[]; d
           <div className="grid gap-4 md:grid-cols-2">
             {([["name", "Full name", "name"], ["phone", "Phone number", "tel"], ["email", "Email address", "email"], ["occasion", "Occasion", "text"]] as const).map(([k, l, t]) => (
               <div key={k}><label className="mb-1 block text-sm font-semibold" htmlFor={k}>{l}</label>
-                <input id={k} type={t === "name" ? "text" : t} required autoComplete={k === "occasion" ? "off" : k} value={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.value })} className={input} /></div>))}
+                <input id={k} type={t === "name" ? "text" : t} required autoComplete={k === "occasion" ? "off" : k === "phone" ? "tel" : k} value={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.value })} className={input} /></div>))}
             <div className="md:col-span-2"><label className="mb-1 block text-sm font-semibold" htmlFor="notes">Additional notes (optional)</label>
               <textarea id="notes" rows={3} value={f.notes} onChange={(e) => setF({ ...f, notes: e.target.value })} className={input} /></div>
+            <div className="md:col-span-2"><label className="mb-1 block text-sm font-semibold" htmlFor="insp">Inspiration photo (optional)</label>
+              <input id="insp" type="file" accept="image/jpeg,image/png,image/webp" className="text-sm" onChange={async (e) => { const file = e.target.files?.[0]; if (!file) { setInsp(null); return; } try { setInsp(await shrink(file, 1200)); } catch { setErr("That photo couldn’t be read."); } }} />
+              {insp && <p className="mt-1 text-sm text-muted">Photo added. Your makeup artist will see it.</p>}</div>
           </div>
           <div className="mt-6 flex gap-3"><button type="button" onClick={() => setStep(1)} className="btn btn-quiet">Back</button><button disabled={!valid} className="btn btn-primary disabled:bg-champagne disabled:text-muted">Continue</button></div>
         </form>)}

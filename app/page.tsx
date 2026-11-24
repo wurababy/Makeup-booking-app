@@ -26,7 +26,7 @@ export default async function Home() {
               <Link href="/assistant" className="btn btn-quiet">Discover My Perfect Look</Link>
             </div>
           </div>
-          <Photo src="/images/hero.jpg" alt="A woman wearing a soft glam makeup look" className="aspect-[4/5] max-h-[620px] w-full" />
+          <Photo src="/images/hero.jpg" alt="A woman wearing a soft glam makeup look" eager className="aspect-[4/5] max-h-[620px] w-full" />
         </div>
       </section>
 

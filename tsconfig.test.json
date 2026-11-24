@@ -1,0 +1,4 @@
+{
+  "compilerOptions": { "target": "ES2022", "module": "commonjs", "outDir": "test-out", "rootDir": ".", "strict": true, "skipLibCheck": true, "esModuleInterop": true, "types": ["node"] },
+  "include": ["tests/**/*.ts", "lib/server/slots.ts", "lib/server/time.ts", "lib/server/signature.ts", "lib/recommend.ts", "lib/features.ts", "data/looks.ts"]
+}

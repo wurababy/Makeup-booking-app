@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer id="contact" className="bg-baby pb-8 pt-14">
+    <footer id="contact" className="bg-baby pb-[calc(2rem+env(safe-area-inset-bottom))] pt-14">
       <div className="wrap grid gap-8 sm:grid-cols-3">
         <div>
           <p className="font-serif text-2xl font-semibold text-rose">Your Studio Name</p>

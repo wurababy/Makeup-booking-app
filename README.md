@@ -20,6 +20,8 @@ Supabase (database, photo storage), AI analysis, bookings, Paystack, admin login
 - Optional "keep my photos": needs Supabase. Run `supabase/schema.sql` in the Supabase SQL Editor and add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
 - The secret keys are only used on the server (`lib/server`). Never put them in a `NEXT_PUBLIC_` variable.
 
+## Phases 3–7 (also run supabase/phase7.sql, set CRON_SECRET, and run npm test)
+
 ## Phases 4–6: booking, Paystack, admin
 1. In Supabase SQL Editor run `supabase/schema.sql`, then `supabase/phase4-6.sql`.
 2. In Supabase > Authentication: turn OFF "Allow new users to sign up", then add yourself under Users with a strong password.

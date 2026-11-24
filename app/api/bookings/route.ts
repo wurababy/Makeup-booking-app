@@ -12,9 +12,10 @@ const text = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slic
 export async function POST(req: Request) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (!allowed(ip, 12)) return fail("Too many attempts. Please try again later.", 429);
-  const b = await req.json().catch(() => null);
-  const slug = text(b?.slug, 80), date = text(b?.date, 10), time = text(b?.time, 5);
-  const name = text(b?.name, 80), phone = text(b?.phone, 30), email = text(b?.email, 120), occasion = text(b?.occasion, 80), notes = text(b?.notes, 500);
+  const form = await req.formData().catch(() => null);
+  const g = (k: string, max: number) => text(form?.get(k), max);
+  const slug = g("slug", 80), date = g("date", 10), time = g("time", 5);
+  const name = g("name", 80), phone = g("phone", 30), email = g("email", 120), occasion = g("occasion", 80), notes = g("notes", 500);
   if (!name || phone.replace(/\D/g, "").length < 7 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !occasion) return fail("Please fill in your name, phone, email and occasion.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return fail("Please choose a date and time.");
   const sb = db(), key = process.env.PAYSTACK_SECRET_KEY;
@@ -34,6 +35,13 @@ export async function POST(req: Request) {
     status: "pending", hold_expires_at: new Date(Date.now() + 15 * 60_000).toISOString(), name, phone, email, occasion, notes,
   });
   if (ins.error) return ins.error.code === "23P01" ? fail("That time was just taken. Please choose another.", 409) : fail("We couldn’t save your booking. Please try again.", 500);
+
+  const insp = form?.get("inspiration"); /* optional inspiration photo, stored privately */
+  if (insp instanceof File && insp.size > 0 && insp.size <= 1_500_000 && ["image/jpeg", "image/png", "image/webp"].includes(insp.type)) {
+    const path = `${ref}.jpg`;
+    const up = await sb.storage.from("inspiration").upload(path, Buffer.from(await insp.arrayBuffer()), { contentType: insp.type });
+    if (!up.error) await sb.from("bookings").update({ inspiration_path: path }).eq("ref", ref);
+  }
 
   const site = process.env.SITE_URL ?? new URL(req.url).origin;
   const r = await fetch("https://api.paystack.co/transaction/initialize", {

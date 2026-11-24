@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "tsc -p tsconfig.test.json && node --test test-out/tests/booking.spec.js test-out/tests/recommend.spec.js"
   },
   "dependencies": {
     "next": "15.1.6",

@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { FEATURES, SKIN_FEEL, type Assessment, type FeatureKey } from "@/lib/features";
+import Recommendations from "./Recommendations";
+import type { RecCard } from "@/lib/recommend";
 
 type Slot = "front" | "left" | "right";
 const SLOTS: { key: Slot; title: string; hint: string; guide: string }[] = [
@@ -31,6 +33,8 @@ export default function AssistantFlow() {
   const [result, setResult] = useState<Assessment | null>(null);
   const [edited, setEdited] = useState<Record<string, boolean>>({});
   const [skinFeel, setSkinFeel] = useState("Not sure");
+  const [recs, setRecs] = useState<RecCard[] | null>(null);
+  const [recBusy, setRecBusy] = useState(false);
   const [saved, setSaved] = useState<{ id: string; token: string } | null>(null);
   const urls = useRef<Partial<Record<Slot, string>>>({});
 
@@ -57,7 +61,7 @@ export default function AssistantFlow() {
   }
   function reset(message = "") {
     (Object.keys(files) as Slot[]).forEach(remove);
-    setResult(null); setEdited({}); setSaved(null); setSkinFeel("Not sure"); setPhase("upload"); setError(message);
+    setResult(null); setEdited({}); setSaved(null); setSkinFeel("Not sure"); setRecs(null); setPhase("upload"); setError(message);
   }
 
   async function submit() {
@@ -81,7 +85,18 @@ export default function AssistantFlow() {
   }
   function change(key: FeatureKey, value: string) {
     setResult((r) => r && { ...r, features: { ...r.features, [key]: { ...r.features[key], value, confidence: "high", note: "" } } });
-    setEdited((e) => ({ ...e, [key]: true }));
+    setEdited((e) => ({ ...e, [key]: true })); setRecs(null);
+  }
+  async function showRecs() {
+    if (!result) return;
+    setRecBusy(true); setError("");
+    const features = Object.fromEntries(FEATURES.map((f) => [f.key, result.features[f.key].value]));
+    try {
+      const r = await fetch("/api/recommend", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ features, skinFeel }) });
+      const j = await r.json();
+      if (j.ok) { setRecs(j.recs); setTimeout(() => document.getElementById("recs")?.scrollIntoView({ behavior: "smooth" }), 60); } else setError(j.error || "Couldn’t get recommendations.");
+    } catch { setError("We couldn’t reach the server. Please try again."); }
+    setRecBusy(false);
   }
 
   const ready = !!files.front && consent;
@@ -125,7 +140,7 @@ export default function AssistantFlow() {
             <p className="mt-2"><b>How they’re processed:</b> your photos are sent securely to an AI service provider, analysed once, and used only to create your suggestions. They are never sold or used to train models by us.</p>
             <p className="mt-2"><b>Storage:</b> by default your photos are <b>not stored</b>. They are discarded as soon as your results are ready.</p>
             <label className="mt-3 flex items-start gap-3"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} className="mt-1.5" />
-              <span>Optional: keep my photos privately so my makeup artist can look at them before my appointment, until I ask for them to be deleted.</span></label>
+              <span>Optional: keep my photos privately so my makeup artist can look at them before my appointment, for up to 30 days, or until I ask for them to be deleted.</span></label>
             <p className="mt-3 text-muted">You can delete saved photos any time from your results, or by emailing <a className="text-rose underline" href="mailto:hello@yourstudio.com?subject=Please%20delete%20my%20photos">hello@yourstudio.com</a>.</p>
           </div>
           <label className="mt-5 flex items-start gap-3 text-sm"><input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1.5" />
@@ -168,10 +183,12 @@ export default function AssistantFlow() {
             </div>
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
+            <button type="button" onClick={showRecs} disabled={recBusy} className="btn btn-primary disabled:opacity-60">{recBusy ? "Choosing your looks…" : "See My Looks"}</button>
             <button type="button" onClick={() => reset()} className="btn btn-quiet">Start over</button>
             {saved && <button type="button" onClick={wipe} className="px-2 py-3 text-rose underline underline-offset-4">Delete my saved photos</button>}
           </div>
           <p className="mt-4 text-sm text-muted">{saved ? "Your photos are saved privately for your makeup artist." : "Your photos were not stored."}</p>
+          {recs && <Recommendations recs={recs} />}
         </div>)}
     </div>
   );

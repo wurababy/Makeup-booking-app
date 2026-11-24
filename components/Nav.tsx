@@ -18,7 +18,7 @@ export default function Nav() {
     return () => document.removeEventListener("keydown", esc);
   }, []);
   return (
-    <header className="sticky top-0 z-50 border-b border-champagne bg-ivory/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-champagne bg-ivory/95 pt-[env(safe-area-inset-top)] backdrop-blur">
       <div className="wrap relative flex h-16 items-center justify-between">
         <Link href="/" className="font-serif text-2xl font-semibold text-rose">Your Studio Name</Link>
         <nav id="menu" aria-label="Main"

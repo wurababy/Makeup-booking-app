@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { shrink } from "@/lib/shrink";
 
-type Booking = { id: string; ref: string; look_name: string; price: number; deposit: number; start_at: string; status: string; name: string; phone: string; email: string; occasion: string; notes: string | null; balance_paid: boolean };
+type Booking = { id: string; ref: string; look_name: string; price: number; deposit: number; start_at: string; status: string; name: string; phone: string; email: string; occasion: string; notes: string | null; balance_paid: boolean; inspiration_url?: string | null };
 type LookRow = { id: string; name: string; category: string; description: string; price: number; minutes: number; photo_url: string | null; active: boolean };
 type Settings = { open_time: string; close_time: string; step_minutes: number; buffer_minutes: number; work_days: number[]; deposit: number };
 type Data = { bookings: Booking[]; looks: LookRow[]; categories: string[]; settings: Settings; blocked: string[]; extra: string[] };
@@ -57,7 +57,7 @@ export default function AdminDashboard({ email }: { email: string }) {
               <summary className="cursor-pointer"><b>{when(b.start_at)}</b> · {b.name}, {b.look_name} <span className="ml-1 rounded-full bg-baby px-2.5 py-0.5 text-xs font-semibold text-rose">{b.status.replace("_", " ")}</span></summary>
               <div className="mt-4 grid gap-5 md:grid-cols-2">
                 <p className="text-sm leading-7"><b>Phone:</b> <a className="text-rose underline" href={`tel:${b.phone}`}>{b.phone}</a> · <a className="text-rose underline" target="_blank" rel="noopener noreferrer" href={`https://wa.me/${wa}`}>WhatsApp</a><br />
-                  <b>Email:</b> <a className="text-rose underline" href={`mailto:${b.email}`}>{b.email}</a><br /><b>Occasion:</b> {b.occasion}<br /><b>Notes:</b> {b.notes || "None"}<br /><b>Reference:</b> {b.ref}</p>
+                  <b>Email:</b> <a className="text-rose underline" href={`mailto:${b.email}`}>{b.email}</a><br /><b>Occasion:</b> {b.occasion}<br /><b>Notes:</b> {b.notes || "None"}<br /><b>Reference:</b> {b.ref}{b.inspiration_url && (<><br /><b>Inspiration:</b> <a className="text-rose underline" href={b.inspiration_url} target="_blank" rel="noopener noreferrer">View photo</a></>)}</p>
                 <div className="text-sm"><p className="leading-7"><b>Total:</b> {naira(b.price)} · <b>Deposit paid:</b> {naira(b.deposit)}<br /><b>Balance:</b> {b.balance_paid ? "Paid" : `${naira(Math.max(b.price - b.deposit, 0))} due`}</p>
                   <label className="mb-1 mt-3 block font-semibold" htmlFor={`s${b.id}`}>Status</label>
                   <select id={`s${b.id}`} value={b.status === "needs_refund" ? "cancelled" : b.status} onChange={(e) => act({ type: "booking", id: b.id, status: e.target.value })} className={inp}>
