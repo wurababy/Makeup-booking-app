@@ -16,3 +16,9 @@ A simple one-page website. No build step. Files: `index.html`, `css/styles.css`,
 ## Still to connect later
 - Payments: add your Paystack public key in `js/main.js` (until then bookings run in demo mode).
 - Real availability, confirmation emails and AI photo analysis need a small backend service.
+
+## Availability and blocking dates
+Edit `data/availability.json` on GitHub: working days (0 = Sunday), opening/closing time, `buffer` minutes between clients, and `blocked` dates (format `"2026-12-25"`).
+
+## Before real bookings
+Bookings are only remembered in each visitor's own browser in this version. Real double-booking protection, payment verification and confirmation emails need a small server (see notes in `js/main.js`).

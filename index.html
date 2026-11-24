@@ -124,7 +124,7 @@
           <div id="feat"></div>
           <h3 style="margin-top:28px">Makeup tips for you</h3>
           <ul id="tipl" class="muted"></ul>
-          <h3 style="margin-top:28px">Looks I think you’ll love</h3>
+          <h2 style="margin-top:40px;font-size:clamp(1.8rem,4vw,2.3rem)">These Looks Might Be Perfect for You.</h2>
           <div id="recs" class="grid" style="margin-top:1rem"></div>
           <div class="row" style="margin-top:28px">
             <button id="redo" class="btn btn-quiet" type="button">Start over</button>
@@ -163,29 +163,47 @@
   <section id="book">
     <div class="wrap">
       <h2>Book your appointment</h2>
-      <p class="muted">Choose a look, pick a date and time, and secure it with a deposit.</p>
-      <div class="card" style="margin-top:2rem">
-        <form id="bookform">
+      <p class="muted">Three quick steps. A deposit secures your time.</p>
+      <ol class="steps" id="steps"><li>Date &amp; time</li><li>Your details</li><li>Deposit</li></ol>
+      <div class="card">
+        <div id="p1">
+          <div class="pick">
+            <div><b id="bkname" style="font:500 1.6rem var(--serif);color:var(--rose)"></b><p class="muted" id="bkmeta" style="margin:0"></p></div>
+            <div><label for="style">Change look</label><select id="style"></select></div>
+          </div>
+          <p id="inspoNote" class="note" style="margin:-8px 0 14px"></p>
+          <div class="two">
+            <div><h3 style="margin-bottom:10px">Choose a date</h3><div class="cal" id="cal"></div></div>
+            <div><h3 style="margin-bottom:10px">Choose a time</h3><div id="slots" class="slots"></div><p class="note" id="slotnote" style="margin-top:10px"></p></div>
+          </div>
+          <button id="to2" class="btn btn-primary" type="button" style="margin-top:22px" disabled>Continue</button>
+        </div>
+        <form id="p2" hidden>
           <div class="two">
             <div>
-              <div class="field"><label for="style">Makeup look</label><select id="style" required></select><p id="inspoNote" class="note" style="margin:6px 0 0"></p></div>
-              <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
-              <div class="field"><label id="tl">Time</label><div id="slots" class="slots" role="group" aria-labelledby="tl"></div></div>
+              <div class="field"><label for="name">Full name</label><input id="name" required autocomplete="name"></div>
+              <div class="field"><label for="phone">Phone number</label><input id="phone" type="tel" required autocomplete="tel"></div>
+              <div class="field"><label for="email">Email address</label><input id="email" type="email" required autocomplete="email"></div>
             </div>
             <div>
-              <div class="field"><label for="name">Your name</label><input id="name" required autocomplete="name"></div>
-              <div class="field"><label for="email">Email</label><input id="email" type="email" required autocomplete="email"></div>
-              <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" required autocomplete="tel"></div>
+              <div class="field"><label for="occ">Occasion</label><input id="occ" list="occs" required placeholder="e.g. Wedding, birthday"><datalist id="occs"><option>Wedding</option><option>Birthday</option><option>Photoshoot</option><option>Party or event</option></datalist></div>
+              <div class="field"><label for="notes">Additional notes (optional)</label><textarea id="notes" rows="4"></textarea></div>
             </div>
           </div>
-          <p id="err" role="alert" style="color:var(--rose);font-weight:600;margin:0 0 12px"></p>
-          <button class="btn btn-primary" type="submit">Pay <span id="dep"></span> deposit</button>
+          <div class="row"><button id="back1" class="btn btn-quiet" type="button">Back</button><button class="btn btn-primary" type="submit">Continue</button></div>
         </form>
+        <div id="p3" hidden>
+          <h3>Your booking summary</h3>
+          <div class="sum" id="sum" style="margin:12px 0 18px"></div>
+          <p id="payerr" role="alert" style="color:var(--rose);font-weight:600;margin:0 0 12px"></p>
+          <div class="row"><button id="back2" class="btn btn-quiet" type="button">Back</button><button id="pay" class="btn btn-primary" type="button"></button></div>
+          <p class="note" id="demo" style="margin-top:12px"></p>
+        </div>
         <div id="done" class="done" aria-live="polite">
           <div class="tick">✓</div>
-          <h3>You're booked, <span id="who"></span>!</h3>
-          <p id="summary" style="margin:.6rem auto"></p>
-          <p class="muted" style="margin:0 auto">A confirmation will be sent to your email.</p>
+          <h3>You’re booked, <span id="who"></span>!</h3>
+          <div class="sum" id="donesum" style="margin:14px 0;text-align:left"></div>
+          <p class="muted" id="donenote" style="margin:0 auto"></p>
         </div>
       </div>
     </div>

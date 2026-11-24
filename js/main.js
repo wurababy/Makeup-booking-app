@@ -1,8 +1,7 @@
 /* ====== SETTINGS: edit these ====== */
 var CONFIG={deposit:15000,currency:"₦",
   // Add your Paystack public key (starts with pk_) to take real payments. Leave blank for demo mode.
-  paystackKey:"",
-  times:["9:00 am","11:00 am","1:00 pm","3:00 pm","5:00 pm"]};
+  paystackKey:""};
 var $=function(i){return document.getElementById(i)};
 var fmt=function(n){return CONFIG.currency+n.toLocaleString("en-NG")};
 var chosen={style:"",time:""};
@@ -10,16 +9,16 @@ var chosen={style:"",time:""};
 /* Makeup looks: edit names, categories, prices, descriptions. Photos go in images/ as <slug>.jpg */
 var CATS=["All Looks","Soft Glam","Full Glam","Bridal","Birthday","Natural","Traditional","Editorial"];
 var LOOKS=[
- {n:"Soft Glam",c:"Soft Glam",s:"soft-glam",p:45000,d:"Polished, luminous makeup for parties and photoshoots."},
- {n:"Rosy Soft Glam",c:"Soft Glam",s:"rosy-soft-glam",p:48000,d:"Dewy skin, rosy cheeks and a glossy lip."},
- {n:"Full Glam",c:"Full Glam",s:"full-glam",p:55000,d:"Bold, sculpted and camera-ready for your biggest nights."},
- {n:"Smoky Full Glam",c:"Full Glam",s:"smoky-full-glam",p:60000,d:"Dramatic smoky eyes with flawless, long-wear skin."},
- {n:"Bridal Glam",c:"Bridal",s:"bridal-glam",p:120000,d:"A long-wear, romantic finish. Trial included."},
- {n:"Bridesmaid Glam",c:"Bridal",s:"bridesmaid-glam",p:50000,d:"Soft, coordinated glam for the bridal party."},
- {n:"Birthday Glam",c:"Birthday",s:"birthday-glam",p:50000,d:"Radiant and celebratory, made to be photographed."},
- {n:"Natural Glam",c:"Natural",s:"natural-glam",p:30000,d:"Fresh, skin-first makeup that looks effortlessly like you."},
- {n:"Traditional Glam",c:"Traditional",s:"traditional-glam",p:70000,d:"Rich, elegant makeup for weddings and cultural celebrations."},
- {n:"Editorial Look",c:"Editorial",s:"editorial-look",p:80000,d:"Creative, artistic makeup for shoots and fashion."}];
+ {n:"Soft Glam",c:"Soft Glam",s:"soft-glam",m:60,p:45000,d:"Polished, luminous makeup for parties and photoshoots."},
+ {n:"Rosy Soft Glam",c:"Soft Glam",s:"rosy-soft-glam",m:60,p:48000,d:"Dewy skin, rosy cheeks and a glossy lip."},
+ {n:"Full Glam",c:"Full Glam",s:"full-glam",m:90,p:55000,d:"Bold, sculpted and camera-ready for your biggest nights."},
+ {n:"Smoky Full Glam",c:"Full Glam",s:"smoky-full-glam",m:90,p:60000,d:"Dramatic smoky eyes with flawless, long-wear skin."},
+ {n:"Bridal Glam",c:"Bridal",s:"bridal-glam",m:150,p:120000,d:"A long-wear, romantic finish. Trial included."},
+ {n:"Bridesmaid Glam",c:"Bridal",s:"bridesmaid-glam",m:75,p:50000,d:"Soft, coordinated glam for the bridal party."},
+ {n:"Birthday Glam",c:"Birthday",s:"birthday-glam",m:75,p:50000,d:"Radiant and celebratory, made to be photographed."},
+ {n:"Natural Glam",c:"Natural",s:"natural-glam",m:45,p:30000,d:"Fresh, skin-first makeup that looks effortlessly like you."},
+ {n:"Traditional Glam",c:"Traditional",s:"traditional-glam",m:120,p:70000,d:"Rich, elegant makeup for weddings and cultural celebrations."},
+ {n:"Editorial Look",c:"Editorial",s:"editorial-look",m:120,p:80000,d:"Creative, artistic makeup for shoots and fashion."}];
 var grid=$("looks-grid"),sel=$("style"),chips=$("chips"),cat="All Looks",cur="";
 function img(s){return "images/"+s+".jpg"}
 sel.innerHTML='<option value="">Choose a look</option>';
@@ -40,13 +39,13 @@ function drawGrid(){
     grid.appendChild(a)});
 }
 function openLook(l){
-  cur=l.n;$("dcat").textContent=l.c;$("dname").textContent=l.n;$("ddesc").textContent=l.d;$("dprice").textContent=fmt(l.p);
+  cur=l.n;$("dcat").textContent=l.c;$("dname").textContent=l.n;$("ddesc").textContent=l.d;$("dprice").textContent=fmt(l.p)+" · about "+dur(l.m);
   var i=$("dimg");i.style.display="";i.onerror=function(){i.style.display="none"};i.src=img(l.s);
   $("gallery").hidden=true;$("detail").hidden=false;$("looks").scrollIntoView();
 }
 $("back").onclick=function(){$("detail").hidden=true;$("gallery").hidden=false;$("looks").scrollIntoView()};
 $("dbook").onclick=function(){pickStyle(cur)};
-function pickStyle(n){sel.value=n;$("book").scrollIntoView()}
+function pickStyle(n){sel.value=n;onLook();go(1)}
 drawChips();drawGrid();
 
 /* Inspiration photo: previews in the browser. Sending it to you needs a backend (see README). */
@@ -56,39 +55,118 @@ $("inspo").onchange=function(){
   $("inspoNote").textContent="Inspiration photo added: "+f.name;
 };
 
-/* Booking: date + times (demo availability; connect a calendar later) */
-var d=$("date"),t=new Date();t.setDate(t.getDate()+1);d.min=t.toISOString().slice(0,10);
-function drawSlots(){
-  var box=$("slots");box.innerHTML="";chosen.time="";
-  if(!d.value){box.innerHTML='<span class="note">Choose a date to see times.</span>';return}
-  var seed=new Date(d.value).getDate();
-  CONFIG.times.forEach(function(x,i){
-    var b=document.createElement("button");b.type="button";b.className="slot";b.textContent=x;
-    b.setAttribute("aria-pressed","false");b.disabled=(seed+i)%4===0;
-    b.onclick=function(){chosen.time=x;box.querySelectorAll(".slot").forEach(function(o){o.setAttribute("aria-pressed",o===b)})};
-    box.appendChild(b)});
+/* ===== Booking =====
+   Working hours, buffer and blocked dates are set in data/availability.json (edit it on GitHub to block dates).
+   IMPORTANT: bookings are remembered in this browser only (demo). To truly stop two clients booking the
+   same time, a server must keep the bookings, check them again at payment and confirm only after Paystack
+   verifies the payment. The functions slotsFor() and finish() are where that connects. */
+var AV={workDays:[1,2,3,4,5,6],open:"09:00",close:"18:00",step:30,buffer:30,leadDays:1,maxDays:90,blocked:[]};
+var B=[];try{B=JSON.parse(localStorage.getItem("bk")||"[]")}catch(x){}
+function saveB(){try{localStorage.setItem("bk",JSON.stringify(B))}catch(x){}}
+function tm(s){var p=s.split(":");return +p[0]*60+ +p[1]}
+function lbl(m){var h=Math.floor(m/60),i=m%60,a=h>=12?"pm":"am";h=h%12||12;return h+":"+(i<10?"0":"")+i+" "+a}
+function dur(m){return m<60?m+" min":Math.floor(m/60)+" hr"+(m%60?" "+m%60+" min":"")}
+function two(n){return n<10?"0"+n:""+n}
+function ds(d){return d.getFullYear()+"-"+two(d.getMonth()+1)+"-"+two(d.getDate())}
+function curLook(){return LOOKS.filter(function(l){return l.n===sel.value})[0]}
+function slotsFor(date){
+  var l=curLook(),out=[];if(!l)return out;
+  for(var s=tm(AV.open);s+l.m<=tm(AV.close);s+=AV.step){
+    var e=s+l.m+AV.buffer,free=true;
+    B.forEach(function(b){if(b.date===date&&s<b.end&&e>b.start)free=false});
+    if(free)out.push(s)}
+  return out;
 }
-d.addEventListener("change",drawSlots);drawSlots();
-$("dep").textContent=fmt(CONFIG.deposit);
-
-$("bookform").addEventListener("submit",function(e){
+function dayOK(d){
+  var t=new Date();t.setHours(0,0,0,0);
+  var a=new Date(t),z=new Date(t);a.setDate(t.getDate()+AV.leadDays);z.setDate(t.getDate()+AV.maxDays);
+  return d>=a&&d<=z&&AV.workDays.indexOf(d.getDay())>-1&&AV.blocked.indexOf(ds(d))<0&&slotsFor(ds(d)).length>0;
+}
+var now=new Date(),cy=now.getFullYear(),cm=now.getMonth(),pickD="",pickT=null,info={};
+function calDraw(){
+  var c=$("cal"),first=new Date(cy,cm,1),n=new Date(cy,cm+1,0).getDate();
+  var h='<div class="calhead"><button type="button" class="navb" id="cp" aria-label="Previous month">‹</button><span>'+first.toLocaleDateString("en-GB",{month:"long",year:"numeric"})+'</span><button type="button" class="navb" id="cn" aria-label="Next month">›</button></div><div class="cgrid">';
+  "SMTWTFS".split("").forEach(function(x){h+="<span>"+x+"</span>"});
+  for(var i=0;i<first.getDay();i++)h+="<div></div>";
+  for(var d=1;d<=n;d++){var dt=new Date(cy,cm,d),s=ds(dt);
+    h+='<button type="button" class="day" data-d="'+s+'" aria-pressed="'+(s===pickD)+'" aria-label="'+dt.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})+'"'+(dayOK(dt)?"":" disabled")+">"+d+"</button>"}
+  c.innerHTML=h+"</div>";
+  var t=new Date(),mx=new Date();mx.setDate(t.getDate()+AV.maxDays);
+  $("cp").disabled=cy===t.getFullYear()&&cm===t.getMonth();
+  $("cn").disabled=cy>mx.getFullYear()||(cy===mx.getFullYear()&&cm>=mx.getMonth());
+  $("cp").onclick=function(){cm--;if(cm<0){cm=11;cy--}calDraw()};
+  $("cn").onclick=function(){cm++;if(cm>11){cm=0;cy++}calDraw()};
+  c.querySelectorAll(".day").forEach(function(b){b.onclick=function(){pickD=b.dataset.d;pickT=null;calDraw();slotDraw();ready1()}});
+}
+function slotDraw(){
+  var box=$("slots"),note=$("slotnote");box.innerHTML="";note.textContent="";
+  if(!curLook()){note.textContent="Choose a look to see available dates.";return}
+  if(!pickD){note.textContent="Choose a date to see times.";return}
+  var list=slotsFor(pickD);
+  if(!list.length){note.textContent="No times left on this day. Please choose another date.";return}
+  list.forEach(function(s){
+    var b=document.createElement("button");b.type="button";b.className="slot";b.textContent=lbl(s);
+    b.setAttribute("aria-pressed",s===pickT);
+    b.onclick=function(){pickT=s;slotDraw();ready1()};box.appendChild(b)});
+}
+function ready1(){$("to2").disabled=!(curLook()&&pickD&&pickT!==null)}
+function onLook(){
+  var l=curLook();pickT=null;
+  $("bkname").textContent=l?l.n:"Choose a look";
+  $("bkmeta").textContent=l?fmt(l.p)+" · about "+dur(l.m)+" (plus a short buffer)":"Pick a look below to begin.";
+  if(pickD&&!slotsFor(pickD).length)pickD="";
+  calDraw();slotDraw();ready1();
+}
+sel.onchange=onLook;
+fetch("data/availability.json").then(function(r){return r.ok?r.json():{}}).then(function(o){for(var k in o)AV[k]=o[k];onLook()}).catch(function(){});
+function go(n,quiet){
+  ["p1","p2","p3"].forEach(function(id,i){$(id).hidden=i!==n-1});
+  document.querySelectorAll("#steps li").forEach(function(li,i){li.className=i===n-1?"on":""});
+  $("done").style.display="none";if(!quiet)$("book").scrollIntoView();
+}
+$("to2").onclick=function(){go(2)};
+$("back1").onclick=function(){go(1)};
+$("back2").onclick=function(){go(2)};
+function rows(o,list){return list.map(function(r){return "<div><span>"+r[0]+"</span><b>"+r[1]+"</b></div>"}).join("")}
+function summary(){
+  var l=curLook(),dt=new Date(pickD+"T00:00:00");
+  return [["Look",l.n],["Date",dt.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})],
+    ["Time",lbl(pickT)+" (about "+dur(l.m)+")"],["Name",info.name],["Phone",info.phone],["Email",info.email],["Occasion",info.occ]]
+    .concat(info.notes?[["Notes",info.notes]]:[]);
+}
+$("p2").onsubmit=function(e){
   e.preventDefault();
-  var err=$("err");
-  if(!$("style").value||!d.value||!chosen.time){err.textContent="Please choose a style, a date and a time.";return}
-  err.textContent="";
-  var info={name:$("name").value,email:$("email").value,phone:$("phone").value,style:$("style").value,date:d.value,time:chosen.time};
-  if(CONFIG.paystackKey&&window.PaystackPop){
-    PaystackPop.setup({key:CONFIG.paystackKey,email:info.email,amount:CONFIG.deposit*100,currency:"NGN",
-      callback:function(){confirmBooking(info)}}).openIframe();
-  }else{confirmBooking(info)} /* demo mode: no real payment */
-});
-function confirmBooking(i){
-  $("bookform").style.display="none";$("done").style.display="block";
-  var when=new Date(i.date).toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
-  $("summary").textContent=i.style+" · "+when+" at "+i.time;
-  $("who").textContent=i.name.split(" ")[0];
-  $("done").scrollIntoView();
+  info={name:$("name").value,phone:$("phone").value,email:$("email").value,occ:$("occ").value,notes:$("notes").value};
+  var l=curLook();
+  $("sum").innerHTML=rows(0,summary().concat([["Total price",fmt(l.p)],["Deposit due now",fmt(CONFIG.deposit)],["Balance on the day",fmt(Math.max(l.p-CONFIG.deposit,0))]]));
+  $("pay").textContent="Pay "+fmt(CONFIG.deposit)+" deposit";$("payerr").textContent="";
+  $("demo").innerHTML=CONFIG.paystackKey?"Secure payment by Paystack. Your booking is only confirmed after the deposit is paid.":'Demo mode: no real payment is taken. <button type="button" id="failbtn" class="btn btn-text btn-sm" style="padding:0 4px">Simulate a failed payment</button>';
+  if($("failbtn"))$("failbtn").onclick=function(){fail("Payment wasn’t completed, so no booking was made and no time was reserved.")};
+  go(3);
+};
+function fail(msg){$("payerr").textContent=msg}
+function finish(ref){
+  /* Server version: confirm here only after your server verifies the Paystack payment. */
+  if(slotsFor(pickD).indexOf(pickT)<0){fail("Sorry, that time was just taken. Your payment was not used for a booking. Please choose another time.");go(1);slotDraw();calDraw();return}
+  var l=curLook();B.push({date:pickD,start:pickT,end:pickT+l.m+AV.buffer,ref:ref});saveB();
+  ["p1","p2","p3"].forEach(function(id){$(id).hidden=true});
+  $("who").textContent=info.name.split(" ")[0];
+  $("donesum").innerHTML=rows(0,summary().concat([["Deposit paid",fmt(CONFIG.deposit)],["Reference",ref]]));
+  $("donenote").textContent=CONFIG.paystackKey?"A confirmation will be sent to "+info.email+".":"Demo mode: no payment was taken and no email was sent.";
+  $("done").style.display="block";$("done").scrollIntoView();calDraw();slotDraw();
 }
+$("pay").onclick=function(){
+  $("payerr").textContent="";
+  if(slotsFor(pickD).indexOf(pickT)<0){fail("Sorry, that time was just taken. Please choose another.");go(1);slotDraw();return}
+  var ref="BK"+Date.now().toString(36).toUpperCase();
+  if(CONFIG.paystackKey&&window.PaystackPop){
+    PaystackPop.setup({key:CONFIG.paystackKey,email:info.email,amount:CONFIG.deposit*100,currency:"NGN",ref:ref,
+      metadata:{look:curLook().n,date:pickD,start:lbl(pickT),name:info.name,phone:info.phone},
+      callback:function(){finish(ref)},
+      onClose:function(){fail("Payment wasn’t completed, so no booking was made and no time was reserved.")}}).openIframe();
+  }else finish(ref); /* demo mode */
+};
+onLook();go(1,true);
 
 /* AI Beauty Assistant. analyse() below gives sample results in this preview.
    To go live, replace it with a call to your backend (a small server that sends the photos to an AI vision
@@ -152,20 +230,23 @@ function showResults(){
   });
   drawRecs();
 }
+var WHY={"Soft Glam":"Soft, diffused tones balance your {s} face shape and keep your {e} eyes as the focus.","Full Glam":"Defined, sculpted makeup brings out your {s} face shape and makes your {e} eyes stand out.","Bridal":"A luminous, long-wear finish complements your {s} face shape and photographs beautifully.","Birthday":"A radiant, celebratory finish that flatters your {s} face shape and {e} eyes.","Natural":"Skin-first makeup lets your {s} face shape and {e} eyes shine without covering your features.","Traditional":"Rich, elegant colour suits your {s} face shape and frames your {e} eyes.","Editorial":"Creative colour and shape make the most of your {s} face shape and {e} eyes."};
 function drawRecs(){
   var t=[];
   if(TIP_SHAPE[res.shape.v])t.push(TIP_SHAPE[res.shape.v]);
   if(TIP_EYE[res.eyes.v])t.push(TIP_EYE[res.eyes.v]);
   t.push("Pick products to match how your skin feels. Your makeup artist will adjust on the day.");
   $("tipl").innerHTML=t.map(function(x){return "<li>"+x+"</li>"}).join("");
-  var pool=LOOKS.filter(function(l){return l.c!=="Editorial"&&l.c!=="Bridal"});
-  recs=[0,3,6].map(function(d){return pool[(seed+d)%pool.length]});
-  recs=recs.filter(function(l,i){return recs.indexOf(l)===i});
+  /* Only looks from your own LOOKS list are ever recommended */
+  var order=["Soft Glam","Natural","Full Glam","Birthday","Traditional","Bridal","Editorial"],r=seed%order.length;
+  order=order.slice(r).concat(order.slice(0,r));
+  var picks=[];
+  order.forEach(function(c){if(picks.length<4){var m=LOOKS.filter(function(l){return l.c===c});if(m.length)picks.push(m[seed%m.length])}});
   var g=$("recs");g.innerHTML="";
-  recs.forEach(function(l){
-    var a=document.createElement("div");a.className="card";
-    a.innerHTML='<h3>'+l.n+'</h3><p class="muted" style="margin:.3rem 0">A lovely match for your '+res.shape.v.toLowerCase()+' face shape and '+res.eyes.v.toLowerCase()+' eyes.</p><div class="price" style="font-size:1.4rem">'+fmt(l.p)+'</div><button class="btn btn-primary btn-sm" type="button" style="margin-top:10px">View This Look</button>';
-    a.querySelector("button").onclick=function(){openLook(l)};g.appendChild(a);
+  picks.forEach(function(l){
+    var a=document.createElement("article");a.className="card rec";
+    a.innerHTML='<div class="photo" data-ph="Add photo"><img src="'+img(l.s)+'" alt="'+l.n+' makeup look" onerror="this.remove()"></div><h3>'+l.n+'</h3><p class="muted">'+l.d+'</p><p class="why"><b>Why this look:</b> '+WHY[l.c].replace("{s}",res.shape.v.toLowerCase()).replace("{e}",res.eyes.v.toLowerCase())+'</p><div class="meta">'+fmt(l.p)+' · about '+dur(l.m)+'</div><button class="btn btn-primary btn-sm" type="button">Select This Look</button>';
+    a.querySelector("button").onclick=function(){pickStyle(l.n)};g.appendChild(a);
   });
 }
 var LINES=["Looking at your face shape…","Noticing your eye shape…","Finding what suits your cheekbones…","Choosing looks you’ll love…"];
