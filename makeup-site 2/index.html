@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Your Studio Name | Makeup Artistry</title>
+<meta name="description" content="Bridal, soft glam and natural makeup artistry. Book your appointment online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">Your Studio Name</a>
+    <nav id="menu" aria-label="Main">
+      <ul>
+        <li><a class="l" href="#top">Home</a></li>
+        <li><a class="l" href="#looks">Makeup Looks</a></li>
+        <li><a class="l" href="#assistant">AI Beauty Assistant</a></li>
+        <li><a class="l" href="#about">About</a></li>
+        <li><a class="l" href="#contact">Contact</a></li>
+      </ul>
+      <a class="btn btn-primary" href="#book">Book Appointment</a>
+    </nav>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <hr class="rule">
+      <h1>Soft, polished,<br><em>unmistakably you.</em></h1>
+      <p>Bridal, glam and natural makeup, tailored to your features and the occasion.</p>
+      <div class="row" style="justify-content:center">
+        <a class="btn btn-primary" href="#book">Book your look</a>
+        <a class="btn btn-quiet" href="#looks">View portfolio</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="looks" class="band">
+    <div class="wrap">
+      <h2>Makeup Looks</h2>
+      <p class="muted">A few of my favourite looks.</p>
+      <!-- To add photos: put them in the images folder and add style="background-image:url(images/your-photo.jpg)" to a tile -->
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <div class="tile" role="img" aria-label="Bridal makeup">Bridal<small>Add photo</small></div>
+        <div class="tile" role="img" aria-label="Soft glam makeup">Soft glam<small>Add photo</small></div>
+        <div class="tile" role="img" aria-label="Natural makeup">Natural<small>Add photo</small></div>
+        <div class="tile" role="img" aria-label="Photoshoot makeup">Photoshoot<small>Add photo</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="styles">
+    <div class="wrap">
+      <h2>Styles and prices</h2>
+      <p class="muted">Tap a style to start your booking.</p>
+      <div class="grid">
+        <button class="card style" data-name="Natural Beauty" aria-pressed="false"><h3>Natural Beauty</h3><p class="muted">Fresh, skin-first makeup that looks effortlessly like you.</p><div class="price">₦30,000</div></button>
+        <button class="card style" data-name="Soft Glam" aria-pressed="false"><h3>Soft Glam</h3><p class="muted">Polished and luminous, for parties and photoshoots.</p><div class="price">₦45,000</div></button>
+        <button class="card style" data-name="Bridal Glow" aria-pressed="false"><h3>Bridal Glow</h3><p class="muted">A long-wear, romantic finish. Trial included.</p><div class="price">₦120,000</div></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="assistant" class="band">
+    <div class="wrap">
+      <h2>AI Beauty Assistant</h2>
+      <p class="muted">Upload a clear, front-facing photo in natural light and get makeup ideas suited to you.</p>
+      <div class="card" style="margin-top:2rem">
+        <img id="pv" class="preview" alt="Your uploaded photo">
+        <div class="field"><label for="photo">Your photo</label><input id="photo" type="file" accept="image/*"></div>
+        <div class="field"><label class="check"><input id="consent" type="checkbox"><span>I agree to my photo being analysed for makeup recommendations. It is not shared or kept.</span></label></div>
+        <button id="analyse" class="btn btn-primary" disabled>Get my recommendations</button>
+        <div id="result" class="result" aria-live="polite">
+          <h3 id="rname"></h3><p id="rtext" style="margin-top:.4rem"></p>
+          <button id="rbook" class="btn btn-quiet" type="button">Book this look</button>
+          <p class="note" style="margin:12px 0 0">Preview version: results are sample suggestions until the AI service is connected.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="wrap">
+      <h2>Book your appointment</h2>
+      <p class="muted">Choose a style, pick a date and time, and secure it with a deposit.</p>
+      <div class="card" style="margin-top:2rem">
+        <form id="bookform">
+          <div class="two">
+            <div>
+              <div class="field"><label for="style">Style</label>
+                <select id="style" required><option value="">Choose a style</option><option>Natural Beauty</option><option>Soft Glam</option><option>Bridal Glow</option></select></div>
+              <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
+              <div class="field"><label id="tl">Time</label><div id="slots" class="slots" role="group" aria-labelledby="tl"></div></div>
+            </div>
+            <div>
+              <div class="field"><label for="name">Your name</label><input id="name" required autocomplete="name"></div>
+              <div class="field"><label for="email">Email</label><input id="email" type="email" required autocomplete="email"></div>
+              <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" required autocomplete="tel"></div>
+            </div>
+          </div>
+          <p id="err" role="alert" style="color:var(--rose);font-weight:600;margin:0 0 12px"></p>
+          <button class="btn btn-primary" type="submit">Pay <span id="dep"></span> deposit</button>
+        </form>
+        <div id="done" class="done" aria-live="polite">
+          <div class="tick">✓</div>
+          <h3>You're booked, <span id="who"></span>!</h3>
+          <p id="summary" style="margin:.6rem auto"></p>
+          <p class="muted" style="margin:0 auto">A confirmation will be sent to your email.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="about" class="band">
+    <div class="wrap">
+      <h2>About</h2>
+      <p>Hello, I'm [Your Name], a professional makeup artist based in Lagos. I believe great makeup should feel like you, only more radiant. Every look is tailored to your features, your skin and your occasion.</p>
+      <p class="muted">Replace this with your story, training and the kind of clients you love working with.</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <h2>Contact</h2>
+      <p class="muted">Questions before you book? I'd love to hear from you.</p>
+      <div class="row" style="margin-top:1.4rem">
+        <a class="btn btn-quiet" href="https://wa.me/234XXXXXXXXXX">WhatsApp</a>
+        <a class="btn btn-quiet" href="https://instagram.com/yourhandle">Instagram</a>
+        <a class="btn btn-quiet" href="mailto:hello@yourstudio.com">Email</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© Your Studio Name · Lagos, Nigeria</div></footer>
+
+<!-- Paystack (only needed once you add your public key in js/main.js) -->
+<script src="https://js.paystack.co/v1/inline.js" defer></script>
+<script src="js/main.js"></script>
+</body>
+</html>
