@@ -1,27 +1,15 @@
-# Your Studio Name – Makeup Artistry Website
+# Studio – Next.js build
 
-A simple one-page website. No build step. Files: `index.html`, `css/styles.css`, `js/main.js`, `images/`.
+**Phase 1 (this folder):** design system, navigation, homepage, makeup gallery and look pages.
 
-## Put it online with GitHub Pages
-1. Create a free account at github.com and click **New repository** (name it e.g. `makeup-studio`, set it to Public).
-2. Click **uploading an existing file**, drag in ALL the files and folders from this project, then **Commit changes**.
-3. Go to **Settings → Pages**. Under **Branch**, choose `main` and `/ (root)`, then **Save**.
-4. After a minute your site is live at `https://YOUR-USERNAME.github.io/makeup-studio/`.
+## Run it
+1. Install Node.js 20 or newer.
+2. In this folder: `npm install`, then `npm run dev`, and open http://localhost:3000.
+3. Add photos to `public/images/` named after each look (e.g. `soft-glam.jpg`), plus `hero.jpg` and `about.jpg`.
+4. Edit looks and prices in `data/looks.ts` (they move to the database in Phase 6).
 
-## Make it yours
-- Replace "Your Studio Name", prices and copy in `index.html`.
-- Add photos to `images/` and set them on the portfolio tiles (see the comment in `index.html`).
-- Deposit amount and times: top of `js/main.js`.
+## Put it online
+Push this folder to a GitHub repository and import it at vercel.com (free). GitHub Pages cannot run Next.js.
 
-## Still to connect later
-- Payments: add your Paystack public key in `js/main.js` (until then bookings run in demo mode).
-- Real availability, confirmation emails and AI photo analysis need a small backend service.
-
-## Availability and blocking dates
-Edit `data/availability.json` on GitHub: working days (0 = Sunday), opening/closing time, `buffer` minutes between clients, and `blocked` dates (format `"2026-12-25"`).
-
-## Before real bookings
-Bookings are only remembered in each visitor's own browser in this version. Real double-booking protection, payment verification and confirmation emails need a small server (see notes in `js/main.js`).
-
-## Admin page
-Open `admin.html` (default access code is in `js/admin.js`; change it). Edit looks, prices, photos, categories, dates and hours, then click **Download settings.json** and upload it to the `data` folder on GitHub. The code lock is only a courtesy: real privacy and shared bookings need the booking server.
+## Coming in later phases
+Supabase (database, photo storage), AI analysis, bookings, Paystack, admin login. Secret keys will go in Vercel environment variables, never in the code or in chat.
