@@ -49,28 +49,88 @@
 
   <section id="looks" class="band">
     <div class="wrap">
-      <h2>Makeup Looks</h2>
-      <p class="muted">Find the look for your moment, then book it in a few taps.</p>
-      <div id="looks-grid" class="grid looks"></div>
+      <div id="gallery">
+        <h2>Makeup Looks</h2>
+        <p class="muted">Browse by style, then choose the look you love.</p>
+        <div id="chips" class="chips" role="group" aria-label="Filter looks"></div>
+        <div id="looks-grid" class="grid looks"></div>
+        <div class="card inspo">
+          <div>
+            <h3>Have a look in mind?</h3>
+            <p class="muted">Upload an inspiration photo and I’ll tailor your makeup to it.</p>
+            <label for="inspo">Inspiration photo</label>
+            <input id="inspo" type="file" accept="image/*">
+          </div>
+          <img id="inspoPv" class="preview" alt="Your inspiration photo">
+        </div>
+      </div>
+      <div id="detail" hidden>
+        <button id="back" class="btn btn-text" type="button" style="padding-left:0">← Back to all looks</button>
+        <div class="two" style="margin-top:12px;align-items:center">
+          <div class="photo" data-ph="Add photo"><img id="dimg" alt=""></div>
+          <div>
+            <p id="dcat" class="note" style="margin:0"></p>
+            <h2 id="dname"></h2>
+            <p id="ddesc"></p>
+            <p class="muted">Includes skin prep, full makeup application, lashes and a finishing setting spray.</p>
+            <div class="price" id="dprice"></div>
+            <div class="row" style="margin-top:16px"><button id="dbook" class="btn btn-primary" type="button">Book This Look</button></div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="assistant" class="blush">
-    <div class="wrap two">
-      <div>
-        <h2>Not Sure Which Look Suits You?</h2>
-        <p class="lead">Let our AI Beauty Assistant analyse your facial features and help you discover makeup looks you’ll love.</p>
-        <button id="start" class="btn btn-light" type="button">Start My Beauty Consultation</button>
+    <div class="wrap">
+      <div class="center">
+        <h2>Let’s Discover Your Beauty.</h2>
+        <p class="lead">Upload a few pictures and let our beauty assistant help you discover makeup styles that complement your facial features.</p>
       </div>
-      <div class="card">
-        <img id="pv" class="preview" alt="Your uploaded photo">
-        <div class="field"><label for="photo">Upload a clear, front-facing photo</label><input id="photo" type="file" accept="image/*"></div>
-        <div class="field"><label class="check"><input id="consent" type="checkbox"><span>I agree to my photo being analysed for makeup recommendations. It is not shared or kept.</span></label></div>
-        <button id="analyse" class="btn btn-primary" disabled>Get my recommendations</button>
-        <div id="result" class="result" aria-live="polite">
-          <h3 id="rname"></h3><p id="rtext" style="margin-top:.4rem"></p>
-          <button id="rbook" class="btn btn-quiet" type="button">Book this look</button>
-          <p class="note" style="margin:12px 0 0">Preview version: results are sample suggestions until the AI service is connected.</p>
+      <div class="card ai">
+        <p id="aimsg" class="note" role="status" style="margin:0 0 10px"></p>
+        <div id="ai-upload">
+          <div class="tips">
+            <h3>For the best results</h3>
+            <ul>
+              <li>Face the camera directly.</li>
+              <li>Use natural or bright lighting.</li>
+              <li>Avoid beauty filters.</li>
+              <li>Keep hair away from your face.</li>
+              <li>Avoid heavy makeup for the assessment.</li>
+            </ul>
+          </div>
+          <div id="slots3" class="slots3"></div>
+          <p class="note" style="margin-top:12px">A front photo is needed. Side profiles help me judge your jawline and cheekbones more reliably.</p>
+          <div class="privacy">
+            <h3>Your privacy</h3>
+            <p><b>Why I ask for photos:</b> so I can notice your features, such as face shape and eye shape, and suggest makeup that suits you.</p>
+            <p><b>How they’re used:</b> your photos are analysed once to create your suggestions. They are never shared, sold or used for anything else.</p>
+            <p><b>Storage:</b> by default, your photos are deleted as soon as your results are ready.</p>
+            <label class="check"><input id="keep" type="checkbox"><span>Optional: keep my photos so my makeup artist can look at them before my appointment.</span></label>
+            <p class="note" style="margin:10px 0 0">You can ask for your photos to be deleted at any time by emailing <a href="mailto:hello@yourstudio.com?subject=Please%20delete%20my%20photos" style="color:var(--rose)">hello@yourstudio.com</a>.</p>
+          </div>
+          <label class="check" style="margin-bottom:16px"><input id="consent" type="checkbox"><span>I agree to my photos being analysed as described above.</span></label>
+          <button id="analyse" class="btn btn-primary" type="button" disabled>Discover My Look</button>
+        </div>
+        <div id="ai-loading" class="center" hidden role="status">
+          <div class="orb"></div>
+          <h3>Getting to Know Your Features…</h3>
+          <p id="status" class="muted" style="margin:.4rem auto 0"></p>
+        </div>
+        <div id="ai-results" hidden>
+          <h3>Here’s what I noticed</h3>
+          <p class="muted">These are estimates from your photos and may not be perfect. If something doesn’t look right, just change it and I’ll update your suggestions.</p>
+          <div id="feat"></div>
+          <h3 style="margin-top:28px">Makeup tips for you</h3>
+          <ul id="tipl" class="muted"></ul>
+          <h3 style="margin-top:28px">Looks I think you’ll love</h3>
+          <div id="recs" class="grid" style="margin-top:1rem"></div>
+          <div class="row" style="margin-top:28px">
+            <button id="redo" class="btn btn-quiet" type="button">Start over</button>
+            <button id="wipe" class="btn btn-text" type="button">Delete my photos now</button>
+          </div>
+          <p class="note" style="margin-top:12px">Preview version: results are sample suggestions until the AI service is connected. Nothing leaves your device in this preview.</p>
         </div>
       </div>
     </div>
@@ -108,7 +168,7 @@
         <form id="bookform">
           <div class="two">
             <div>
-              <div class="field"><label for="style">Makeup look</label><select id="style" required></select></div>
+              <div class="field"><label for="style">Makeup look</label><select id="style" required></select><p id="inspoNote" class="note" style="margin:6px 0 0"></p></div>
               <div class="field"><label for="date">Date</label><input id="date" type="date" required></div>
               <div class="field"><label id="tl">Time</label><div id="slots" class="slots" role="group" aria-labelledby="tl"></div></div>
             </div>
@@ -131,17 +191,6 @@
     </div>
   </section>
 </main>
-
-<dialog id="lookdlg" aria-labelledby="lname">
-  <div class="photo" data-ph="Add photo"><img id="limg" alt=""></div>
-  <h3 id="lname" style="margin-top:16px"></h3>
-  <p id="ldesc" class="muted" style="margin:.4rem 0"></p>
-  <div class="price" id="lprice"></div>
-  <div class="row" style="margin-top:14px">
-    <button id="lbook" class="btn btn-primary" type="button">Book this look</button>
-    <button id="lclose" class="btn btn-quiet" type="button">Close</button>
-  </div>
-</dialog>
 
 <footer id="contact">
   <div class="wrap foot">
