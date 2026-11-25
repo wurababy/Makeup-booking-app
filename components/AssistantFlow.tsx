@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FEATURES, SKIN_FEEL, type Assessment, type FeatureKey } from "@/lib/features";
 import Recommendations from "./Recommendations";
+import { SITE } from "@/config/site";
 import type { RecCard } from "@/lib/recommend";
 
 type Slot = "front" | "left" | "right";
@@ -141,10 +142,10 @@ export default function AssistantFlow() {
             <p className="mt-2"><b>Storage:</b> by default your photos are <b>not stored</b>. They are discarded as soon as your results are ready.</p>
             <label className="mt-3 flex items-start gap-3"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} className="mt-1.5" />
               <span>Optional: keep my photos privately so my makeup artist can look at them before my appointment, for up to 30 days, or until I ask for them to be deleted.</span></label>
-            <p className="mt-3 text-muted">You can delete saved photos any time from your results, or by emailing <a className="text-rose underline" href="mailto:hello@yourstudio.com?subject=Please%20delete%20my%20photos">hello@yourstudio.com</a>.</p>
+            <p className="mt-3 text-muted">You can delete saved photos any time from your results, or by emailing <a className="text-rose underline" href={`mailto:${SITE.email}?subject=Please%20delete%20my%20photos`}>{SITE.email}</a>.</p>
           </div>
           <label className="mt-5 flex items-start gap-3 text-sm"><input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1.5" />
-            <span>I agree to my photos being analysed as described above.</span></label>
+            <span>I agree to my photos being analysed as described above. <a href="/privacy" target="_blank" className="text-rose underline">Privacy policy</a></span></label>
           <button type="button" disabled={!ready} onClick={submit} className="btn btn-primary mt-5 disabled:cursor-not-allowed disabled:bg-champagne disabled:text-muted">Discover My Look</button>
         </div>)}
 

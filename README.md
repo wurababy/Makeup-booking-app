@@ -1,3 +1,7 @@
+# Multi-artist makeup platform (Next.js)
+
+**Start with `PLATFORM-SETUP.md`.** The original single-studio site now lives at `/studio` (see below).
+
 # Studio – Next.js build
 
 **Phase 1 (this folder):** design system, navigation, homepage, makeup gallery and look pages.
@@ -19,6 +23,8 @@ Supabase (database, photo storage), AI analysis, bookings, Paystack, admin login
 - Photos are shrunk in the browser (this also removes location data), sent to `/api/assess`, analysed once and discarded by default.
 - Optional "keep my photos": needs Supabase. Run `supabase/schema.sql` in the Supabase SQL Editor and add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
 - The secret keys are only used on the server (`lib/server`). Never put them in a `NEXT_PUBLIC_` variable.
+
+## Launching: see GO-LIVE.md
 
 ## Phases 3–7 (also run supabase/phase7.sql, set CRON_SECRET, and run npm test)
 

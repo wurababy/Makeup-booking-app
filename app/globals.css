@@ -9,7 +9,7 @@
 }
 @layer components {
   .btn { @apply inline-flex items-center justify-center rounded-full px-7 py-3.5 font-semibold transition-colors; }
-  .btn-primary { @apply bg-blush text-brown hover:bg-[#E091A3]; }
+  .btn-primary { @apply bg-blush text-brown hover:bg-[#F7A3BF]; }
   .btn-quiet { @apply border border-rose text-rose hover:bg-baby; }
   .btn-light { @apply bg-white text-brown hover:bg-baby; }
   .wrap { @apply mx-auto max-w-5xl px-6; }

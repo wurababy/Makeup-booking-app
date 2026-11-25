@@ -5,8 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        blush: "#E8A7B5", baby: "#F7DDE3", ivory: "#FFF9F5", rose: "#A9566D",
-        champagne: "#E8D5C4", brown: "#49383A", mauve: "#9C858A", muted: "#7E676C",
+        blush: "#F48FB1", baby: "#FDE3EC", ivory: "#FFF8FA", rose: "#B8386A",
+        champagne: "#F2D6C9", brown: "#49383A", mauve: "#9C858A", muted: "#7A6166",
       },
       fontFamily: {
         serif: ["var(--font-serif)", "Georgia", "serif"],

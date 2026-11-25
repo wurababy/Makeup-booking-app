@@ -17,7 +17,7 @@ export default function BookingFlow({ looks, deposit, initial }: { looks: L[]; d
   const [step, setStep] = useState(1), [tick, setTick] = useState(0);
   const [f, setF] = useState({ name: "", phone: "", email: "", occasion: "", notes: "" });
   const [busy, setBusy] = useState(false), [err, setErr] = useState("");
-  const [insp, setInsp] = useState<File | null>(null);
+  const [insp, setInsp] = useState<File | null>(null), [agree, setAgree] = useState(false);
   const look = looks.find((l) => l.slug === slug);
 
   useEffect(() => {
@@ -112,8 +112,9 @@ export default function BookingFlow({ looks, deposit, initial }: { looks: L[]; d
               <div key={k} className="flex justify-between gap-4 border-b border-champagne py-2.5"><dt className="text-muted">{k}</dt><dd className="text-right font-semibold">{v}</dd></div>))}
           </dl>
           <p className="mt-3 text-sm text-muted">You’ll pay securely on Paystack. Your time is held for 15 minutes, and your booking is only confirmed once the deposit is paid.</p>
+          <label className="mt-4 flex items-start gap-3 text-sm"><input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-1.5" /><span>I’ve read the <a href="/policies" target="_blank" className="text-rose underline">booking policy</a> and <a href="/privacy" target="_blank" className="text-rose underline">privacy policy</a>.</span></label>
           <div className="mt-5 flex gap-3"><button type="button" onClick={() => setStep(2)} className="btn btn-quiet">Back</button>
-            <button type="button" disabled={busy} onClick={pay} className="btn btn-primary disabled:opacity-60">{busy ? "One moment…" : `Pay ${naira(dep)} deposit`}</button></div>
+            <button type="button" disabled={busy || !agree} onClick={pay} className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60">{busy ? "One moment…" : `Pay ${naira(dep)} deposit`}</button></div>
         </div>)}
     </div>
   );

@@ -6,13 +6,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "tsc -p tsconfig.test.json && node --test test-out/tests/booking.spec.js test-out/tests/recommend.spec.js"
+    "test": "tsc -p tsconfig.test.json && node --test test-out/tests/booking.spec.js test-out/tests/recommend.spec.js test-out/tests/profile.spec.js"
   },
   "dependencies": {
     "next": "15.1.6",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "@supabase/supabase-js": "2.47.10"
+    "@supabase/supabase-js": "2.47.10",
+    "@supabase/ssr": "0.5.2"
   },
   "devDependencies": {
     "@types/node": "22.10.5",
